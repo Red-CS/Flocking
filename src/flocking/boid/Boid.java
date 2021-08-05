@@ -5,6 +5,7 @@ import flocking.Window;
 import flocking.util.Angle;
 import flocking.util.Perspective;
 import flocking.util.Vector2D;
+import flocking.util.Velocity;
 
 /**
  * Boid Class
@@ -14,12 +15,12 @@ import flocking.util.Vector2D;
  */
 public class Boid {
 
-    private final int MOVEMENT_SPEED = 3;
-    private static final double PERSPECTION_RADIUS = 50;
-    private static final double PERSPECTION_ANGLE = 180;
+    private static final float MOVEMENT_SPEED = 4.5F;
+    private static final float PERSPECTION_RADIUS = 50;
+    private static final float PERSPECTION_ANGLE = 180;
 
     private Vector2D position;
-    private Angle direction;
+    private Velocity velocity;
     private Perspective perspective;
 
     /**
@@ -28,9 +29,9 @@ public class Boid {
      */
     public Boid() {
         this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
-            (float) (Math.random() * Window.WINDOW_HEIGHT)), new Angle(Math
-                .random() * 360), new Perspective(new Angle(PERSPECTION_ANGLE),
-                    PERSPECTION_RADIUS));
+            (float) (Math.random() * Window.WINDOW_HEIGHT)), new Velocity(
+                new Angle((float) (Math.random() * 360)), MOVEMENT_SPEED),
+            new Perspective(new Angle(PERSPECTION_ANGLE), PERSPECTION_RADIUS));
     }
 
 
@@ -42,10 +43,10 @@ public class Boid {
      * @param y Boid y position
      * @param dir Boid direction
      */
-    public Boid(Vector2D pos, Angle dir, Perspective view) {
+    public Boid(Vector2D pos, Velocity vel, Perspective view) {
         position = pos;
-        direction = dir;
-        perspective = view;
+        velocity = vel;
+        setPerspective(view);
     }
 
 
@@ -54,28 +55,34 @@ public class Boid {
     }
 
 
-    public void setPosition(Vector2D newPos) {
-        position = newPos;
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
+
+
+    public Velocity getVelocity() {
+        return velocity;
+    }
+
+
+    public void setVelocity(Velocity velocity) {
+        this.velocity = velocity;
     }
 
 
     /**
-     * Returns the Direction of the Boid
-     * 
-     * @return the Direction of the Boid
+     * @return the perspective
      */
-    public Angle getDirection() {
-        return direction;
+    public Perspective getPerspective() {
+        return perspective;
     }
 
 
     /**
-     * Sets the new Direction of the Boid
-     * 
-     * @param newDirection new Direction of the Boid
+     * @param perspective the perspective to set
      */
-    public void setDirection(Angle newDirection) {
-        direction = newDirection;
+    public void setPerspective(Perspective perspective) {
+        this.perspective = perspective;
     }
 
 
@@ -107,8 +114,10 @@ public class Boid {
      * Updates the Boid's position depending on it's surroundings
      */
     public void update() {
-        position.x += Math.cos(direction.toRadians()) * MOVEMENT_SPEED;
-        position.y -= Math.sin(direction.toRadians()) * MOVEMENT_SPEED;
+        position.x += Math.cos(velocity.getDirection().toRadians())
+            * MOVEMENT_SPEED;
+        position.y -= Math.sin(velocity.getDirection().toRadians())
+            * MOVEMENT_SPEED;
         fixOffscreen();
     }
 
@@ -143,6 +152,26 @@ public class Boid {
 
 
     /**
+     * Tests whether or not two Boid objects are equal
+     * 
+     * @param obj Object to compare with
+     * @return {@code true} if they the same, {@code false} if not
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Boid objBoid = (Boid) obj;
+        return objBoid.position.equals(position) && objBoid.velocity.equals(
+            velocity) && objBoid.perspective.equals(perspective);
+    }
+
+
+    /**
      * Returns a String representation of a Boid
      * 
      * @return a String representation of a Boid
@@ -150,6 +179,6 @@ public class Boid {
     @Override
     public String toString() {
         return "[" + Styles.df.format(position.x) + ", " + Styles.df.format(
-            position.y) + ", " + direction + "]";
+            position.y) + ", " + velocity.getDirection().toString() + "]";
     }
 }

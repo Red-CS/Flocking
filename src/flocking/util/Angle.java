@@ -10,20 +10,20 @@ import flocking.Styles;
  */
 public class Angle {
 
-    private double angle;
+    private float angle;
 
     /**
      * Direction Constructor
      * Creates a new Direction using degrees
      */
-    public Angle(double angle) {
+    public Angle(float angle) {
         this.angle = angle % 360;
     }
 
 
-    public Angle(double x, double y) {
+    public Angle(float x, float y) {
         // TODO Add case for x = 0 and y = 0
-        angle = Math.atan(y / x);
+        angle = (float) Math.atan(y / x);
     }
 
 
@@ -40,7 +40,7 @@ public class Angle {
     /**
      * @param newAngle
      */
-    public void setAngle(double newAngle) {
+    public void setAngle(float newAngle) {
         angle = newAngle;
     }
 

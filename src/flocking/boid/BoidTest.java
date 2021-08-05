@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import flocking.Window;
 import flocking.util.Angle;
 import flocking.util.Perspective;
+import flocking.util.Vector2D;
+import flocking.util.Velocity;
 
 /**
  * Test Class for the Boid Class
@@ -24,8 +26,10 @@ public class BoidTest {
      */
     @BeforeEach
     public void setUp() throws Exception {
-        boid = new Boid(10.5, 10.5, new Angle(270.5), new Perspective(new Angle(
-            180.0), 20.0));
+        Vector2D pos = new Vector2D(10.5F, 10.5f);
+        Velocity velocity = new Velocity(new Angle(270.5F), 3f);
+        Perspective view = new Perspective(new Angle(180.0f), 20.0f);
+        boid = new Boid(pos, velocity, view);
     }
 
 
@@ -34,68 +38,54 @@ public class BoidTest {
         Boid randomBoid;
         for (int i = 0; i < 10000; i++) {
             randomBoid = new Boid();
-            assertTrue(boid.getX() >= 0);
-            assertTrue(boid.getX() < Window.WINDOW_WIDTH);
-            assertTrue(boid.getY() >= 0);
-            assertTrue(boid.getY() < Window.WINDOW_HEIGHT);
+            Vector2D pos = randomBoid.getPosition();
+            assertTrue(pos.x >= 0);
+            assertTrue(pos.x < Window.WINDOW_WIDTH);
+            assertTrue(pos.y >= 0);
+            assertTrue(pos.y < Window.WINDOW_HEIGHT);
         }
     }
 
 
     /**
-     * Test method for {@link flocking.boid.Boid#getX()}.
+     * Test method for {@link flocking.boid.Boid#getPosition()}.
      */
     @Test
-    public void testGetX() {
-        assertEquals(10.5, boid.getX());
+    public void testGetPosition() {
+        assertEquals(10.5, boid.getPosition().x);
+        assertEquals(10.5, boid.getPosition().y);
     }
 
 
     /**
-     * Test method for {@link flocking.boid.Boid#getY()}.
+     * Test method for {@link flocking.boid.Boid#setPosition(Vector2D)}.
      */
     @Test
-    public void testGetY() {
-        assertEquals(10.5, boid.getY());
+    public void testSetPosition() {
+        boid.setPosition(new Vector2D(20.0f, 20.0f));
+        assertEquals(20.0, boid.getPosition().x);
+        assertEquals(20.0, boid.getPosition().y);
     }
 
 
     /**
-     * Test method for {@link flocking.boid.Boid#setX(double)}.
+     * Test method for {@link flocking.boid.Boid#getVelocity()}.
      */
     @Test
-    public void testSetX() {
-        boid.setX(20.0);
-        assertEquals(20.0, boid.getX());
+    public void testGetVelocity() {
+        assertTrue(boid.getVelocity().equals(new Velocity(new Angle(270.5F),
+            3f)));
     }
 
 
     /**
-     * Test method for {@link flocking.boid.Boid#setY(double)}.
+     * Test method for {@link flocking.boid.Boid#setVelocity(Angle, float)}.
      */
     @Test
-    public void testSetY() {
-        boid.setY(20.0);
-        assertEquals(20.0, boid.getY());
-    }
-
-
-    /**
-     * Test method for {@link flocking.boid.Boid#getDirection()}.
-     */
-    @Test
-    public void testGetDirection() {
-        assertTrue(new Angle(270.5).equals(boid.getDirection()));
-    }
-
-
-    /**
-     * Test method for {@link flocking.boid.Boid#setDirection(Angle)}.
-     */
-    @Test
-    public void testSetDirection() {
-        boid.setDirection(new Angle(90.0));
-        assertTrue(new Angle(90.0).equals(boid.getDirection()));
+    public void testSetVelocity() {
+        boid.setVelocity(new Velocity(new Angle(90.0f), 2.0f));
+        assertTrue(boid.getVelocity().equals(new Velocity(new Angle(90F),
+            2.0f)));
     }
 
 
@@ -104,6 +94,15 @@ public class BoidTest {
      */
     @Test
     public void testUpdate() {
+        fail("Not yet implemented");
+    }
+
+
+    /**
+     * Test method for {@link flocking.boid.Boid#equals()}.
+     */
+    @Test
+    public void testEquals() {
         fail("Not yet implemented");
     }
 

@@ -10,7 +10,7 @@ package flocking.util;
 public class Perspective {
 
     Angle theta;
-    double radius;
+    float radius;
 
     /**
      * Perspective Constructor
@@ -22,7 +22,7 @@ public class Perspective {
      * @throws IllegalArgumentException when {@code theta} is outside range [0,
      *     180]
      */
-    public Perspective(Angle theta, double radius)
+    public Perspective(Angle theta, float radius)
         throws IllegalArgumentException {
 
         if (theta.toDegrees() < 0 || theta.toDegrees() > 180.0) {

@@ -95,7 +95,7 @@ public class Display extends JPanel {
 
             // Draw Boid
             imageG2.drawPolygon(buildPolygon(x, y, xCoords, yCoords, boid
-                .getDirection().toDegrees()));
+                .getVelocity().getDirection().toDegrees()));
         }
         // Draw Image Buffer
         g2d.drawImage(imageBuffer, 0, 0, this);

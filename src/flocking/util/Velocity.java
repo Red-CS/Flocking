@@ -52,4 +52,24 @@ public class Velocity {
         this.magnitude = magnitude;
     }
 
+
+    /**
+     * Tests whether or not two Velocity objects are equal
+     * 
+     * @param obj Object to compare with
+     * @return {@code true} if they the same, {@code false} if not
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Velocity objVelocity = (Velocity) obj;
+        return objVelocity.direction.equals(direction)
+            && objVelocity.magnitude == magnitude;
+    }
+
 }

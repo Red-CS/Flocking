@@ -19,7 +19,7 @@ public class PerspectiveTest {
      */
     @BeforeEach
     public void setUp() throws Exception {
-        view = new Perspective(new Angle(45.0), 20);
+        view = new Perspective(new Angle(45.0f), 20);
     }
 
 
@@ -28,7 +28,7 @@ public class PerspectiveTest {
      */
     @Test
     public void testGetTheta() {
-        assertEquals(45.0, view.getTheta());
+        assertEquals(new Angle(45.0f), view.getTheta());
     }
 
 
