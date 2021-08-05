@@ -4,6 +4,7 @@ import flocking.Styles;
 import flocking.Window;
 import flocking.util.Angle;
 import flocking.util.Perspective;
+import flocking.util.Vector2D;
 
 /**
  * Boid Class
@@ -17,8 +18,7 @@ public class Boid {
     private static final double PERSPECTION_RADIUS = 50;
     private static final double PERSPECTION_ANGLE = 180;
 
-    private double xPos;
-    private double yPos;
+    private Vector2D position;
     private Angle direction;
     private Perspective perspective;
 
@@ -27,9 +27,10 @@ public class Boid {
      * Creates a Boid with a random position within the screen
      */
     public Boid() {
-        this(Math.random() * Window.WINDOW_WIDTH, Math.random()
-            * Window.WINDOW_HEIGHT, new Angle(Math.random() * 360),
-            new Perspective(new Angle(PERSPECTION_ANGLE), PERSPECTION_RADIUS));
+        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
+            (float) (Math.random() * Window.WINDOW_HEIGHT)), new Angle(Math
+                .random() * 360), new Perspective(new Angle(PERSPECTION_ANGLE),
+                    PERSPECTION_RADIUS));
     }
 
 
@@ -41,41 +42,20 @@ public class Boid {
      * @param y Boid y position
      * @param dir Boid direction
      */
-    public Boid(double x, double y, Angle dir, Perspective view) {
-        xPos = x;
-        yPos = y;
+    public Boid(Vector2D pos, Angle dir, Perspective view) {
+        position = pos;
         direction = dir;
         perspective = view;
     }
 
 
-    /**
-     * Returns the X position of the Boid
-     * 
-     * @return the X position of the Boid
-     */
-    public double getX() {
-        return xPos;
+    public Vector2D getPosition() {
+        return position;
     }
 
 
-    /**
-     * Returns the Y position of the Boid
-     * 
-     * @return the Y position of the Boid
-     */
-    public double getY() {
-        return yPos;
-    }
-
-
-    /**
-     * Sets the X position of the Boid
-     * 
-     * @param x new X position of the Boid
-     */
-    public void setX(double x) {
-        xPos = x;
+    public void setPosition(Vector2D newPos) {
+        position = newPos;
     }
 
 
@@ -100,34 +80,24 @@ public class Boid {
 
 
     /**
-     * Sets the Y position of the Boid
-     * 
-     * @param y new Y position of the Boid
-     */
-    public void setY(double y) {
-        yPos = y;
-    }
-
-
-    /**
      * Fixes the Boid's position if it goes ofscreen
      */
     private void fixOffscreen() {
 
         // Fix possible X offset
-        if (xPos < 0) {
-            xPos = Window.WINDOW_WIDTH;
+        if (position.x < 0) {
+            position.x = Window.WINDOW_WIDTH;
         }
-        else if (xPos >= Window.WINDOW_WIDTH) {
-            xPos = 0;
+        else if (position.x >= Window.WINDOW_WIDTH) {
+            position.x = 0;
         }
 
         // Fix possible Y offset
-        if (yPos < 0) {
-            yPos = Window.WINDOW_HEIGHT;
+        if (position.y < 0) {
+            position.y = Window.WINDOW_HEIGHT;
         }
-        else if (yPos >= Window.WINDOW_HEIGHT) {
-            yPos = 0;
+        else if (position.y >= Window.WINDOW_HEIGHT) {
+            position.y = 0;
         }
 
     }
@@ -137,8 +107,8 @@ public class Boid {
      * Updates the Boid's position depending on it's surroundings
      */
     public void update() {
-        xPos += Math.cos(direction.toRadians()) * MOVEMENT_SPEED;
-        yPos -= Math.sin(direction.toRadians()) * MOVEMENT_SPEED;
+        position.x += Math.cos(direction.toRadians()) * MOVEMENT_SPEED;
+        position.y -= Math.sin(direction.toRadians()) * MOVEMENT_SPEED;
         fixOffscreen();
     }
 
@@ -179,7 +149,7 @@ public class Boid {
      */
     @Override
     public String toString() {
-        return "[" + Styles.df.format(xPos) + ", " + Styles.df.format(yPos)
-            + ", " + direction + "]";
+        return "[" + Styles.df.format(position.x) + ", " + Styles.df.format(
+            position.y) + ", " + direction + "]";
     }
 }

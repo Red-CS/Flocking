@@ -88,8 +88,8 @@ public class Display extends JPanel {
         for (Boid boid : flock) {
 
             // Get Polygon info
-            int x = (int) boid.getX();
-            int y = (int) boid.getY();
+            int x = (int) boid.getPosition().x;
+            int y = (int) boid.getPosition().y;
             int[] xCoords = { x + 12, x - 12, x - 12 };
             int[] yCoords = { y, y - 8, y + 8 };
 
