@@ -25,7 +25,7 @@ public class Boid {
 
     /**
      * Boid Constructor
-     * Creates a Boid with a random position within the screen
+     * Creates a Boid with random attributes within the screen
      */
     public Boid() {
         this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
@@ -37,16 +37,86 @@ public class Boid {
 
     /**
      * Boid Constructor
-     * Creates a Boid with the specified position
+     * Creates a Boid with a random perspective and velocity, but defined
+     * position, within the screen
+     */
+    public Boid(Vector2D pos) {
+        this(pos, new Velocity(new Angle((float) (Math.random() * 360)),
+            MOVEMENT_SPEED), new Perspective(new Angle(PERSPECTION_ANGLE),
+                PERSPECTION_RADIUS));
+    }
+
+
+    /**
+     * Boid Constructor
+     * Creates a Boid with a random position and perspective, but defined
+     * velocity, within the screen
+     */
+    public Boid(Velocity vel) {
+        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
+            (float) (Math.random() * Window.WINDOW_HEIGHT)), vel,
+            new Perspective(new Angle(PERSPECTION_ANGLE), PERSPECTION_RADIUS));
+    }
+
+
+    /**
+     * Boid Constructor
+     * Creates a Boid with a random position and velocity, but defined
+     * perspective, within the screen
+     */
+    public Boid(Perspective view) {
+        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
+            (float) (Math.random() * Window.WINDOW_HEIGHT)), new Velocity(
+                new Angle((float) (Math.random() * 360)), MOVEMENT_SPEED),
+            view);
+    }
+
+
+    /**
+     * Boid Constructor
+     * Creates a Boid with a random position, but defined velocity and
+     * perspective, within the screen
+     */
+    public Boid(Velocity vel, Perspective view) {
+        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
+            (float) (Math.random() * Window.WINDOW_HEIGHT)), vel, view);
+    }
+
+
+    /**
+     * Boid Constructor
+     * Creates a Boid with a random velocity, but defined position and
+     * perspective, within the screen
+     */
+    public Boid(Vector2D pos, Perspective view) {
+        this(pos, new Velocity(new Angle((float) (Math.random() * 360)),
+            MOVEMENT_SPEED), view);
+    }
+
+
+    /**
+     * Boid Constructor
+     * Creates a Boid with a random Perspective, but defined Position and
+     * Velocity, within the screen
+     */
+    public Boid(Vector2D pos, Velocity vel) {
+        this(pos, vel, new Perspective(new Angle(PERSPECTION_ANGLE),
+            PERSPECTION_RADIUS));
+    }
+
+
+    /**
+     * Boid Constructor
+     * Creates a Boid with the specified position, velocity, and perspective
      * 
-     * @param x Boid x position
-     * @param y Boid y position
-     * @param dir Boid direction
+     * @param pos Boid Vector2D position
+     * @param vel Boid Velocity
+     * @param view Boid Perspective
      */
     public Boid(Vector2D pos, Velocity vel, Perspective view) {
         position = pos;
         velocity = vel;
-        setPerspective(view);
+        perspective = view;
     }
 
 
@@ -113,7 +183,10 @@ public class Boid {
     /**
      * Updates the Boid's position depending on it's surroundings
      */
-    public void update() {
+    public void update(Flock<Boid> flock) {
+
+        align(flock);
+
         position.x += Math.cos(velocity.getDirection().toRadians())
             * MOVEMENT_SPEED;
         position.y -= Math.sin(velocity.getDirection().toRadians())
@@ -135,10 +208,35 @@ public class Boid {
      */
     private void align(Flock<Boid> flock) {
 
+        // Average components
+        float xAvg = 0f;
+        float yAvg = 0f;
+        int numBoids = 0;
+
         // Iterate through each member of the flock
-        // -- If that Boid is in the perspective of this Boid,
-        // -- include its velocity vector in calculating the average
-        // Calculate the steering velocity vector
+        for (Boid boid : flock) {
+            if (boid != this && boid.isVisibleTo(this)) {
+                xAvg += boid.getPosition().x;
+                yAvg += boid.getPosition().y;
+                numBoids++;
+            }
+        }
+
+        if (numBoids == 0) {
+            return;
+        }
+
+        xAvg /= numBoids;
+        yAvg /= numBoids;
+
+        velocity.setDirection(new Angle(xAvg, yAvg));
+
+        // Alignment
+
+// Vector2D steeringForce = new Vector2D(xAvg, yAvg);
+// -- If that Boid is in the perspective of this Boid,
+// -- include its velocity vector in calculating the average
+// Calculate the steering velocity vector
 
     }
 
@@ -148,6 +246,20 @@ public class Boid {
      */
     private void cohere() {
 
+    }
+
+
+    /**
+     * Returns whether or not a Boid is visible to the current Boid {@code boid}
+     * 
+     * @param boid {@code this} Boid
+     * @return {@code true} if the Boid calling this method is in the
+     * perspective of {@code boid}, {@code false} otherwise.
+     */
+    private boolean isVisibleTo(Boid boid) {
+        Vector2D compPos = boid.getPosition();
+        return boid.getPerspective().contains(new Vector2D(position.x
+            - compPos.x, position.y - compPos.y));
     }
 
 

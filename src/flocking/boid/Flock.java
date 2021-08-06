@@ -2,6 +2,8 @@ package flocking.boid;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import flocking.util.Angle;
+import flocking.util.Perspective;
 
 /**
  * Flock Class
@@ -25,7 +27,7 @@ public class Flock<T> implements Iterable<T> {
         this.populationSize = populationSize;
         flock = new Boid[populationSize];
         for (int i = 0; i < populationSize; i++) {
-            flock[i] = new Boid();
+            flock[i] = new Boid(new Perspective(new Angle(180f), 50f));
         }
     }
 

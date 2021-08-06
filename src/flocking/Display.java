@@ -45,9 +45,6 @@ public class Display extends JPanel {
 
         // Instantiate Flock
         flock = new Flock<Boid>(FLOCK_SIZE);
-        for (Boid boid : flock) {
-            System.out.println(boid.toString());
-        }
 
         // Start Animation Timer
         timer = new Timer(TICK_RATE, new ActionListener() {
@@ -57,7 +54,7 @@ public class Display extends JPanel {
 
                 // Updates each Boid accordingly
                 for (Boid boid : flock) {
-                    boid.update();
+                    boid.update(flock);
                 }
 
                 repaint();
@@ -96,6 +93,9 @@ public class Display extends JPanel {
             // Draw Boid
             imageG2.drawPolygon(buildPolygon(x, y, xCoords, yCoords, boid
                 .getVelocity().getDirection().toDegrees()));
+
+            // Draw Perspective
+            imageG2.drawOval(x - 25, y - 25, 50, 50);
         }
         // Draw Image Buffer
         g2d.drawImage(imageBuffer, 0, 0, this);

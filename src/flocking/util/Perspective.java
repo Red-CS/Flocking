@@ -53,4 +53,20 @@ public class Perspective {
         return radius;
     }
 
+
+    /**
+     * Returns whether or not a Perspective contains a point
+     * 
+     * @param point Vector2D point to check
+     * @return {@code true} if the Perspective field contains the point,
+     * {@code false} otherwise.
+     */
+    public boolean contains(Vector2D point) {
+        float boidAngle = Math.abs((float) (Math.atan2(point.y, point.x)));
+        if (boidAngle <= theta.toRadians() && boidAngle >= -theta.toRadians()) {
+            return (point.calcMagnitude() <= radius);
+        }
+        return false;
+    }
+
 }
