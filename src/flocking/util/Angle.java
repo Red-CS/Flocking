@@ -11,6 +11,7 @@ import flocking.Styles;
 public class Angle {
 
     private float angle;
+    private final float EQUALS_THRESHOLD = 0.1f;
 
     /**
      * Direction Constructor
@@ -28,16 +29,6 @@ public class Angle {
 
 
     /**
-     * Returns the angle in degrees
-     * 
-     * @return the direction
-     */
-    public double toDegrees() {
-        return angle;
-    }
-
-
-    /**
      * @param newAngle
      */
     public void setAngle(float newAngle) {
@@ -45,8 +36,18 @@ public class Angle {
     }
 
 
-    public double toRadians() {
-        return Math.toRadians(angle);
+    /**
+     * Returns the angle in degrees
+     * 
+     * @return the direction
+     */
+    public float toDegrees() {
+        return angle;
+    }
+
+
+    public float toRadians() {
+        return (float) Math.toRadians(angle);
     }
 
 
@@ -72,7 +73,7 @@ public class Angle {
 
         Angle dir = (Angle) obj;
 
-        return dir.toDegrees() == toDegrees();
+        return Math.abs(dir.toDegrees() - toDegrees()) <= EQUALS_THRESHOLD;
     }
 
 

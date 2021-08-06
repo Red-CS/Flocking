@@ -31,7 +31,7 @@ public class Vector2DTest {
     @Test
     public void testSetVectorFromFloat() {
         Vector2D vectorF = new Vector2D(20F, 20F);
-        vector.setVector(vectorF);
+        vector.setVector(vectorF.x, vectorF.y);
         assertEquals(20F, vector.x);
         assertEquals(20F, vector.y);
     }
@@ -47,6 +47,37 @@ public class Vector2DTest {
         vector.setVector(vectorV);
         assertEquals(20F, vector.x);
         assertEquals(20F, vector.y);
+    }
+
+
+    /**
+     * Test method for {@link flocking.util.Vector2D#add(Vector2D)}.
+     */
+    @Test
+    public void testAdd() {
+        vector.add(new Vector2D(-10.52f, 1.2f));
+        assertEquals(0, vector.x);
+        assertEquals(11.72, vector.y, 0.01);
+    }
+
+
+    /**
+     * Test method for {@link flocking.util.Vector2D#scale(float)}.
+     */
+    @Test
+    public void testScale() {
+        vector.scale((float) (1.0 / 3.0));
+        assertEquals(3.5, vector.x, 0.01);
+        assertEquals(3.5, vector.y, 0.01);
+    }
+
+
+    /**
+     * Test method for {@link flocking.util.Vector2D#calcMagnitude()}.
+     */
+    @Test
+    public void testCalcMagnitude() {
+        assertEquals(14.87, vector.calcMagnitude(), 0.01);
     }
 
 

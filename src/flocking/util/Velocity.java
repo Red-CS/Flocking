@@ -1,13 +1,18 @@
 package flocking.util;
 
+import flocking.Styles;
+
 /**
  * Velocity Class
- * Provides an Angular-based Velocity implementation
+ * Provides a Velocity implementation using Polar and Cartesian coordinates
  * 
+ * @implNote Cartesian coordinates provide a cleaner way of performing vector
+ * actions,
+ * and Polar coordinates provide an easy way to visualize the Vector
  * @author Red Williams <red.devcs@gmail.com>
  * @since Aug 4, 2021
  */
-public class Velocity {
+public class Velocity extends Vector2D {
 
     private Angle direction;
     private float magnitude;
@@ -16,6 +21,8 @@ public class Velocity {
      * Velocity Constructor
      */
     public Velocity(Angle direction, float magnitude) {
+        super((float) (magnitude * Math.cos(direction.toRadians())),
+            (float) (magnitude * Math.sin(direction.toRadians())));
         this.direction = direction;
         this.magnitude = magnitude;
     }
@@ -30,10 +37,16 @@ public class Velocity {
 
 
     /**
+     * Sets the angle of the Velocity vector given the angle, also computing the
+     * x and y components
+     * 
      * @param direction the direction to set
      */
     public void setDirection(Angle direction) {
         this.direction = direction;
+        setVector((float) (magnitude * Math.cos(direction.toRadians())),
+            (float) (magnitude * Math.sin(direction.toRadians())));
+
     }
 
 
@@ -50,6 +63,41 @@ public class Velocity {
      */
     public void setMagnitude(float magnitude) {
         this.magnitude = magnitude;
+        setVector((float) (magnitude * Math.cos(direction.toRadians())),
+            (float) (magnitude * Math.sin(direction.toRadians())));
+    }
+
+
+    public void add(Velocity velocity) {
+        x += velocity.x;
+        y += velocity.y;
+        direction = new Angle((float) (Math.toDegrees(Math.atan2(y, x))));
+        magnitude = calcMagnitude();
+    }
+
+
+    @Override
+    public void add(Vector2D vector) {
+        super.add(vector);
+
+        // Calculate angle
+        float vectorAngle = (float) (Math.toDegrees(Math.atan2(y, x)));
+
+        // Change to positive, if necessary
+        if (vectorAngle < 0) {
+            vectorAngle += 360;
+        }
+
+        // Reset direciton and magnitude
+        direction = new Angle(vectorAngle);
+        magnitude = calcMagnitude();
+    }
+
+
+    @Override
+    public void scale(float scaleFactor) {
+        super.scale(scaleFactor);
+        magnitude *= scaleFactor;
     }
 
 
@@ -70,6 +118,13 @@ public class Velocity {
         Velocity objVelocity = (Velocity) obj;
         return objVelocity.direction.equals(direction)
             && objVelocity.magnitude == magnitude;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" + direction.toString() + ", " + Styles.df.format(magnitude)
+            + "} : " + super.toString();
     }
 
 }

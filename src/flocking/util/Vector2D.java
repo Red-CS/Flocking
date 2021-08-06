@@ -49,6 +49,45 @@ public class Vector2D {
 
 
     /**
+     * Adds two Vectors together
+     * 
+     * @param compliment Vector to add
+     */
+    public void add(Vector2D compliment) {
+        x += compliment.x;
+        y += compliment.y;
+    }
+
+
+    public void scale(float scaleFactor) {
+        x *= scaleFactor;
+        y *= scaleFactor;
+    }
+
+
+    /**
+     * Finds the magnitude of a Vector
+     * 
+     * @return
+     */
+    public float calcMagnitude() {
+        return calcMagnitude(x, y);
+    }
+
+
+    /**
+     * Finds the magnitude of a Vector given its components
+     * 
+     * @param x
+     * @param y
+     * @return
+     */
+    public static float calcMagnitude(float x, float y) {
+        return (float) (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+    }
+
+
+    /**
      * Tests whether or not two Vector2D objects are equal
      * 
      * @param obj Object to compare with
