@@ -29,8 +29,10 @@ public class Display extends JPanel {
     private Flock<Boid> flock;
     private Timer timer;
 
-    public static final int FLOCK_SIZE = 10;
+    public static final int FLOCK_SIZE = 30;
     private final int TICK_RATE = 10;
+
+    private final boolean shouldDrawViews = false;
 
     /**
      * Display Constructor
@@ -95,7 +97,9 @@ public class Display extends JPanel {
                 .getVelocity().getDirection().toDegrees()));
 
             // Draw Perspective
-            imageG2.drawOval(x - 25, y - 25, 50, 50);
+            if (shouldDrawViews) {
+                imageG2.drawOval(x - 25, y - 25, 50, 50);
+            }
         }
         // Draw Image Buffer
         g2d.drawImage(imageBuffer, 0, 0, this);

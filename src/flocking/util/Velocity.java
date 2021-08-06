@@ -28,6 +28,18 @@ public class Velocity extends Vector2D {
     }
 
 
+    public Velocity(float x, float y) {
+        super(x, y);
+        direction = new Angle(x, y);
+        magnitude = calcMagnitude();
+    }
+
+
+    public void setVelocity(Velocity newVelocity) {
+
+    }
+
+
     /**
      * @return the direction
      */
@@ -68,6 +80,11 @@ public class Velocity extends Vector2D {
     }
 
 
+    /**
+     * Adds a Velocity vector to the current Velocity
+     * 
+     * @param velocity Velocity to add
+     */
     public void add(Velocity velocity) {
         x += velocity.x;
         y += velocity.y;
@@ -76,24 +93,40 @@ public class Velocity extends Vector2D {
     }
 
 
+    /**
+     * Adds a Vector to the current Velocity Vector, and reconfigures the Angle
+     * and Magnitude variables
+     * 
+     * @param vector Vector2D to add
+     */
     @Override
     public void add(Vector2D vector) {
         super.add(vector);
 
-        // Calculate angle
-        float vectorAngle = (float) (Math.toDegrees(Math.atan2(y, x)));
-
-        // Change to positive, if necessary
-        if (vectorAngle < 0) {
-            vectorAngle += 360;
-        }
-
-        // Reset direciton and magnitude
-        direction = new Angle(vectorAngle);
-        magnitude = calcMagnitude();
+        reconfigVars();
     }
 
 
+    /**
+     * Subtracts a Vector from the current Velocity Vector, and reconfigures the
+     * Angle
+     * and Magnitude variables
+     * 
+     * @param vector Vector2D to subtract
+     */
+    @Override
+    public void subtract(Vector2D vector) {
+        super.subtract(vector);
+        reconfigVars();
+
+    }
+
+
+    /**
+     * Scales the Velocity vector be the specified scale factor
+     * 
+     * @param scaleFactor scale factor to scale by
+     */
     @Override
     public void scale(float scaleFactor) {
         super.scale(scaleFactor);
@@ -125,6 +158,24 @@ public class Velocity extends Vector2D {
     public String toString() {
         return "{" + direction.toString() + ", " + Styles.df.format(magnitude)
             + "} : " + super.toString();
+    }
+
+
+    /**
+     * Reconfigures the variables after performing Vector operations
+     */
+    private void reconfigVars() {
+        // Calculate angle
+        float vectorAngle = (float) (Math.toDegrees(Math.atan2(y, x)));
+
+        // Change to positive, if necessary
+        if (vectorAngle < 0) {
+            vectorAngle += 360;
+        }
+
+        // Reset direciton and magnitude
+        direction = new Angle(vectorAngle);
+        magnitude = calcMagnitude();
     }
 
 }

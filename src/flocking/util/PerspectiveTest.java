@@ -110,8 +110,6 @@ public class PerspectiveTest {
         y = (float) (Math.sin(Math.PI / 6.0));
         assertTrue(view.contains(new Vector2D(x, y)));
         assertTrue(circular.contains(new Vector2D(x, y)));
-        
-        assertFalse(new Perspective)
 
     }
 

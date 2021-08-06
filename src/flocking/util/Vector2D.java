@@ -59,6 +59,22 @@ public class Vector2D {
     }
 
 
+    /**
+     * Subtracts one Vector from another
+     * 
+     * @param compliment Vector to subtract
+     */
+    public void subtract(Vector2D compliment) {
+        x -= compliment.x;
+        y -= compliment.y;
+    }
+
+
+    /**
+     * Scales the vector by the passed scale factor
+     * 
+     * @param scaleFactor scale factor to scale the Vector by
+     */
     public void scale(float scaleFactor) {
         x *= scaleFactor;
         y *= scaleFactor;

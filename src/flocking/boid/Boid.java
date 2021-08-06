@@ -229,11 +229,13 @@ public class Boid {
         xAvg /= numBoids;
         yAvg /= numBoids;
 
-        velocity.setDirection(new Angle(xAvg, yAvg));
+// velocity.setDirection(new Angle(xAvg, yAvg));
 
         // Alignment
-
-// Vector2D steeringForce = new Vector2D(xAvg, yAvg);
+        Velocity steeringForce = new Velocity(xAvg, yAvg);
+        steeringForce.subtract(velocity);
+        velocity.setDirection(steeringForce.getDirection());
+// velocity = steeringForce;
 // -- If that Boid is in the perspective of this Boid,
 // -- include its velocity vector in calculating the average
 // Calculate the steering velocity vector
