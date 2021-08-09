@@ -27,7 +27,7 @@ public class Flock<T> implements Iterable<T> {
         this.populationSize = populationSize;
         flock = new Boid[populationSize];
         for (int i = 0; i < populationSize; i++) {
-            flock[i] = new Boid(new Perspective(new Angle(180f), 50f));
+            flock[i] = new Boid(new Perspective(new Angle(180f), 30f));
         }
     }
 

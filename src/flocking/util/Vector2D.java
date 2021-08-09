@@ -1,7 +1,5 @@
 package flocking.util;
 
-import flocking.Styles;
-
 /**
  * Vector2D Class
  * 
@@ -59,6 +57,12 @@ public class Vector2D {
     }
 
 
+    public void displayAdd(Vector2D compliment) {
+        x += compliment.x;
+        y -= compliment.y;
+    }
+
+
     /**
      * Subtracts one Vector from another
      * 
@@ -70,6 +74,12 @@ public class Vector2D {
     }
 
 
+    public void displaySubtract(Vector2D compliment) {
+        x -= compliment.x;
+        y += compliment.y;
+    }
+
+
     /**
      * Scales the vector by the passed scale factor
      * 
@@ -78,6 +88,19 @@ public class Vector2D {
     public void scale(float scaleFactor) {
         x *= scaleFactor;
         y *= scaleFactor;
+    }
+
+
+    public void normalize() {
+        x /= calcMagnitude();
+        y /= calcMagnitude();
+    }
+
+
+    public void limit(float magnitude) {
+        if (magnitude < calcMagnitude()) {
+            scale(magnitude / calcMagnitude());
+        }
     }
 
 
@@ -100,6 +123,17 @@ public class Vector2D {
      */
     public static float calcMagnitude(float x, float y) {
         return (float) (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+    }
+
+
+    /**
+     * Returns a random unit vector
+     * 
+     * @return
+     */
+    public static Vector2D random2D() {
+        float angle = (float) (Math.random() * 2 * Math.PI);
+        return new Vector2D((float) Math.cos(angle), (float) Math.sin(angle));
     }
 
 
@@ -129,7 +163,7 @@ public class Vector2D {
      */
     @Override
     public String toString() {
-        return "[" + Styles.df.format(x) + ", " + Styles.df.format(y) + "]";
+        return "[" + x + ", " + y + "]";
     }
 
 }

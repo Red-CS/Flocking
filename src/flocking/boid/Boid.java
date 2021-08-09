@@ -5,7 +5,6 @@ import flocking.Window;
 import flocking.util.Angle;
 import flocking.util.Perspective;
 import flocking.util.Vector2D;
-import flocking.util.Velocity;
 
 /**
  * Boid Class
@@ -19,89 +18,22 @@ public class Boid {
     private static final float PERSPECTION_RADIUS = 50;
     private static final float PERSPECTION_ANGLE = 180;
 
-    private Vector2D position;
-    private Velocity velocity;
     private Perspective perspective;
+    private Angle heading;
 
-    /**
-     * Boid Constructor
-     * Creates a Boid with random attributes within the screen
-     */
-    public Boid() {
-        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
-            (float) (Math.random() * Window.WINDOW_HEIGHT)), new Velocity(
-                new Angle((float) (Math.random() * 360)), MOVEMENT_SPEED),
-            new Perspective(new Angle(PERSPECTION_ANGLE), PERSPECTION_RADIUS));
-    }
+    private Vector2D position;
+    private Vector2D velocity;
+    private Vector2D acceleration;
 
-
-    /**
-     * Boid Constructor
-     * Creates a Boid with a random perspective and velocity, but defined
-     * position, within the screen
-     */
-    public Boid(Vector2D pos) {
-        this(pos, new Velocity(new Angle((float) (Math.random() * 360)),
-            MOVEMENT_SPEED), new Perspective(new Angle(PERSPECTION_ANGLE),
-                PERSPECTION_RADIUS));
-    }
-
-
-    /**
-     * Boid Constructor
-     * Creates a Boid with a random position and perspective, but defined
-     * velocity, within the screen
-     */
-    public Boid(Velocity vel) {
-        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
-            (float) (Math.random() * Window.WINDOW_HEIGHT)), vel,
-            new Perspective(new Angle(PERSPECTION_ANGLE), PERSPECTION_RADIUS));
-    }
-
-
-    /**
-     * Boid Constructor
-     * Creates a Boid with a random position and velocity, but defined
-     * perspective, within the screen
-     */
     public Boid(Perspective view) {
-        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
-            (float) (Math.random() * Window.WINDOW_HEIGHT)), new Velocity(
-                new Angle((float) (Math.random() * 360)), MOVEMENT_SPEED),
-            view);
-    }
+        perspective = view;
+        heading = new Angle((float) (Math.random() * 360));
 
-
-    /**
-     * Boid Constructor
-     * Creates a Boid with a random position, but defined velocity and
-     * perspective, within the screen
-     */
-    public Boid(Velocity vel, Perspective view) {
-        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
-            (float) (Math.random() * Window.WINDOW_HEIGHT)), vel, view);
-    }
-
-
-    /**
-     * Boid Constructor
-     * Creates a Boid with a random velocity, but defined position and
-     * perspective, within the screen
-     */
-    public Boid(Vector2D pos, Perspective view) {
-        this(pos, new Velocity(new Angle((float) (Math.random() * 360)),
-            MOVEMENT_SPEED), view);
-    }
-
-
-    /**
-     * Boid Constructor
-     * Creates a Boid with a random Perspective, but defined Position and
-     * Velocity, within the screen
-     */
-    public Boid(Vector2D pos, Velocity vel) {
-        this(pos, vel, new Perspective(new Angle(PERSPECTION_ANGLE),
-            PERSPECTION_RADIUS));
+        float x = (float) (Math.random() * Window.WINDOW_WIDTH);
+        float y = (float) (Math.random() * Window.WINDOW_WIDTH);
+        position = new Vector2D(x, y);
+        velocity = Vector2D.random2D();
+        acceleration = Vector2D.random2D();
     }
 
 
@@ -113,10 +45,14 @@ public class Boid {
      * @param vel Boid Velocity
      * @param view Boid Perspective
      */
-    public Boid(Vector2D pos, Velocity vel, Perspective view) {
+    public Boid(Vector2D pos, Perspective view) {
         position = pos;
-        velocity = vel;
         perspective = view;
+        heading = new Angle((float) (Math.random() * 360));
+
+        velocity = Vector2D.random2D();
+        acceleration = Vector2D.random2D();
+        System.out.println(velocity);
     }
 
 
@@ -130,12 +66,12 @@ public class Boid {
     }
 
 
-    public Velocity getVelocity() {
+    public Vector2D getVelocity() {
         return velocity;
     }
 
 
-    public void setVelocity(Velocity velocity) {
+    public void setVelocity(Vector2D velocity) {
         this.velocity = velocity;
     }
 
@@ -156,6 +92,16 @@ public class Boid {
     }
 
 
+    public Angle getDirection() {
+        return heading;
+    }
+
+
+    public void setDirection(Angle newDir) {
+        heading = newDir;
+    }
+
+
     /**
      * Fixes the Boid's position if it goes ofscreen
      */
@@ -165,16 +111,16 @@ public class Boid {
         if (position.x < 0) {
             position.x = Window.WINDOW_WIDTH;
         }
-        else if (position.x >= Window.WINDOW_WIDTH) {
-            position.x = 0;
+        else if (position.x > Window.WINDOW_WIDTH) {
+            position.x = 2;
         }
 
         // Fix possible Y offset
         if (position.y < 0) {
             position.y = Window.WINDOW_HEIGHT;
         }
-        else if (position.y >= Window.WINDOW_HEIGHT) {
-            position.y = 0;
+        else if (position.y > Window.WINDOW_HEIGHT) {
+            position.y = 2;
         }
 
     }
@@ -187,10 +133,13 @@ public class Boid {
 
         align(flock);
 
-        position.x += Math.cos(velocity.getDirection().toRadians())
-            * MOVEMENT_SPEED;
-        position.y -= Math.sin(velocity.getDirection().toRadians())
-            * MOVEMENT_SPEED;
+        position.displayAdd(velocity);
+        velocity.displayAdd(acceleration);
+        velocity.limit(4);
+        acceleration.scale(0);
+        heading.setAngle((float) (Math.toDegrees(Math.atan2(velocity.y,
+            velocity.x))));
+        System.out.println(heading);
         fixOffscreen();
     }
 
@@ -229,17 +178,18 @@ public class Boid {
         xAvg /= numBoids;
         yAvg /= numBoids;
 
-// velocity.setDirection(new Angle(xAvg, yAvg));
-
         // Alignment
-        Velocity steeringForce = new Velocity(xAvg, yAvg);
-        steeringForce.subtract(velocity);
-        velocity.setDirection(steeringForce.getDirection());
+        Vector2D steeringForce = new Vector2D(xAvg, yAvg);
+        steeringForce.displaySubtract(velocity);
+        steeringForce.normalize();
 // velocity = steeringForce;
-// -- If that Boid is in the perspective of this Boid,
-// -- include its velocity vector in calculating the average
-// Calculate the steering velocity vector
+// steeringForce.scale(steeringForce.calcMagnitude() / 4);
+// System.out.println(steeringForce);
 
+        acceleration.displayAdd(steeringForce);
+// heading.setAngle((float) Math.toDegrees(Math.atan(steeringForce.y
+// / steeringForce.x)));
+        System.out.println(heading.toDegrees());
     }
 
 
@@ -293,6 +243,6 @@ public class Boid {
     @Override
     public String toString() {
         return "[" + Styles.df.format(position.x) + ", " + Styles.df.format(
-            position.y) + ", " + velocity.getDirection().toString() + "]";
+            position.y) + ", " + "velocity.getDirection().toString()" + "]";
     }
 }

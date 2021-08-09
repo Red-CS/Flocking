@@ -94,7 +94,7 @@ public class Display extends JPanel {
 
             // Draw Boid
             imageG2.drawPolygon(buildPolygon(x, y, xCoords, yCoords, boid
-                .getVelocity().getDirection().toDegrees()));
+                .getDirection().toDegrees()));
 
             // Draw Perspective
             if (shouldDrawViews) {
