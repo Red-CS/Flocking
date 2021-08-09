@@ -56,7 +56,7 @@ public class Display extends JPanel {
 
                 // Updates each Boid accordingly
                 for (Boid boid : flock) {
-                    boid.update(flock);
+                    boid.flock(flock);
                 }
 
                 repaint();

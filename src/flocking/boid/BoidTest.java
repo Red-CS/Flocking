@@ -6,10 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import flocking.Window;
-import flocking.util.Angle;
-import flocking.util.Perspective;
 import flocking.util.Vector2D;
-import flocking.util.Velocity;
 
 /**
  * Test Class for the Boid Class
@@ -25,12 +22,7 @@ public class BoidTest {
      * @throws java.lang.Exception
      */
     @BeforeEach
-    public void setUp() throws Exception {
-        Vector2D pos = new Vector2D(10.5F, 10.5f);
-        Velocity velocity = new Velocity(new Angle(270.5F), 3f);
-        Perspective view = new Perspective(new Angle(180.0f), 20.0f);
-        boid = new Boid(pos, velocity, view);
-    }
+    public void setUp() throws Exception {}
 
 
     @Test
@@ -65,27 +57,6 @@ public class BoidTest {
         boid.setPosition(new Vector2D(20.0f, 20.0f));
         assertEquals(20.0, boid.getPosition().x);
         assertEquals(20.0, boid.getPosition().y);
-    }
-
-
-    /**
-     * Test method for {@link flocking.boid.Boid#getVelocity()}.
-     */
-    @Test
-    public void testGetVelocity() {
-        assertTrue(boid.getVelocity().equals(new Velocity(new Angle(270.5F),
-            3f)));
-    }
-
-
-    /**
-     * Test method for {@link flocking.boid.Boid#setVelocity(Angle, float)}.
-     */
-    @Test
-    public void testSetVelocity() {
-        boid.setVelocity(new Velocity(new Angle(90.0f), 2.0f));
-        assertTrue(boid.getVelocity().equals(new Velocity(new Angle(90F),
-            2.0f)));
     }
 
 

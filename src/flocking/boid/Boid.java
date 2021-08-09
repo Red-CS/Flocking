@@ -14,10 +14,6 @@ import flocking.util.Vector2D;
  */
 public class Boid {
 
-    private static final float MOVEMENT_SPEED = 4.5F;
-    private static final float PERSPECTION_RADIUS = 50;
-    private static final float PERSPECTION_ANGLE = 180;
-
     private Perspective perspective;
     private Angle heading;
 
@@ -103,33 +99,9 @@ public class Boid {
 
 
     /**
-     * Fixes the Boid's position if it goes ofscreen
-     */
-    private void fixOffscreen() {
-
-        // Fix possible X offset
-        if (position.x < 0) {
-            position.x = Window.WINDOW_WIDTH;
-        }
-        else if (position.x > Window.WINDOW_WIDTH) {
-            position.x = 2;
-        }
-
-        // Fix possible Y offset
-        if (position.y < 0) {
-            position.y = Window.WINDOW_HEIGHT;
-        }
-        else if (position.y > Window.WINDOW_HEIGHT) {
-            position.y = 2;
-        }
-
-    }
-
-
-    /**
      * Updates the Boid's position depending on it's surroundings
      */
-    public void update(Flock<Boid> flock) {
+    public void flock(Flock<Boid> flock) {
 
         align(flock);
 
@@ -197,6 +169,30 @@ public class Boid {
      * Steer to move towards the average position of local flockmates
      */
     private void cohere() {
+
+    }
+
+
+    /**
+     * Fixes the Boid's position if it goes ofscreen
+     */
+    private void fixOffscreen() {
+
+        // Fix possible X offset
+        if (position.x < 0) {
+            position.x = Window.WINDOW_WIDTH;
+        }
+        else if (position.x > Window.WINDOW_WIDTH) {
+            position.x = 2;
+        }
+
+        // Fix possible Y offset
+        if (position.y < 0) {
+            position.y = Window.WINDOW_HEIGHT;
+        }
+        else if (position.y > Window.WINDOW_HEIGHT) {
+            position.y = 2;
+        }
 
     }
 

@@ -3,7 +3,10 @@ package flocking.util;
 import flocking.Styles;
 
 /**
- * Flocking Class
+ * Angle Class
+ * <br>
+ * Provides a way to store and convert angle measurements.
+ * Default measurement is in degrees.
  * 
  * @author Red Williams <red.devcs@gmail.com>
  * @since Aug 3, 2021
@@ -11,43 +14,80 @@ import flocking.Styles;
 public class Angle {
 
     private float angle;
+
+    /** Maximum difference required for two Angles to equal each other */
     private final float EQUALS_THRESHOLD = 0.1f;
 
     /**
-     * Direction Constructor
-     * Creates a new Direction using degrees
+     * Angle Constructor
+     * <br>
+     * Creates a new Angle using degrees. Supports angle measurements less than
+     * zero.
+     * 
+     * @param angle Angle (in degrees) to set
      */
     public Angle(float angle) {
         this.angle = angle % 360;
-    }
+        fixNegativeAngle();
 
-
-    public Angle(float x, float y) {
-        // TODO Add case for x = 0 and y = 0
-        angle = (float) Math.atan(y / x);
     }
 
 
     /**
-     * @param newAngle
+     * Angle Constructor
+     * <br>
+     * Creates an Angle based on x and y components
+     * 
+     * @param x X component of the angle
+     * @param y Y component of the angle
      */
-    public void setAngle(float newAngle) {
-        angle = newAngle;
+    public Angle(float x, float y) {
+        angle = (float) Math.toDegrees(Math.atan2(y, x));
+        fixNegativeAngle();
+    }
+
+
+    /**
+     * Sets the angle (in degrees) of the current {@code Angle} object
+     * 
+     * @param angle Angle (in degrees) to set
+     */
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 
 
     /**
      * Returns the angle in degrees
      * 
-     * @return the direction
+     * @return the angle in degrees
      */
     public float toDegrees() {
         return angle;
     }
 
 
+    /**
+     * Returns the angle in radians
+     * 
+     * @return the angle in radians
+     */
     public float toRadians() {
         return (float) Math.toRadians(angle);
+    }
+
+
+    /**
+     * Handles a negative angle being passed to the constructor.
+     * <br>
+     * {@link #Angle(float)} <br>
+     * {@link #Angle(float, float)}
+     */
+    private void fixNegativeAngle() {
+        // Handle negative angle
+        if (angle < 0) {
+            angle += 360;
+        }
     }
 
 
@@ -61,13 +101,10 @@ public class Angle {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
         if (obj == this) {
             return true;
         }
-        if (obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
 
@@ -77,6 +114,11 @@ public class Angle {
     }
 
 
+    /**
+     * Returns a String representation of an {@code Angle} object
+     * 
+     * @return a String representation of an {@code Angle} object
+     */
     @Override
     public String toString() {
         return Styles.df.format(angle) + "°";
