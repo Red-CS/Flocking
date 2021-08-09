@@ -16,10 +16,10 @@ public class FlockTest {
     private Flock<Boid> flock;
 
     /**
-     * @throws java.lang.Exception
+     * Runs before every test
      */
     @BeforeEach
-    protected void setUp() throws Exception {
+    public void setUp() {
         flock = new Flock<Boid>(3);
     }
 
@@ -28,7 +28,7 @@ public class FlockTest {
      * Test method for {@link flocking.boid.Flock#toArray()}.
      */
     @Test
-    protected void testToArray() {
+    public void testToArray() {
         Boid[] boids = flock.toArray();
         assertEquals(3, boids.length);
         assertNotNull(boids[0]);
@@ -39,7 +39,7 @@ public class FlockTest {
      * Test method for {@link flocking.boid.Flock#size()}.
      */
     @Test
-    protected void testSize() {
+    public void testSize() {
         assertEquals(3, flock.size());
     }
 

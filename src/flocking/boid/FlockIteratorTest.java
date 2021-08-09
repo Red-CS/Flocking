@@ -20,10 +20,10 @@ public class FlockIteratorTest {
     private Iterator<Boid> iter;
 
     /**
-     * @throws java.lang.Exception
+     * Runs before each test
      */
     @BeforeEach
-    protected void setUp() throws Exception {
+    public void setUp() {
         flock = new Flock<Boid>(2);
         iter = flock.iterator();
     }
@@ -33,7 +33,7 @@ public class FlockIteratorTest {
      * Test method for {@link flocking.boid.Flock.FlockIterator#hasNext()}.
      */
     @Test
-    protected void testHasNext() {
+    public void testHasNext() {
         assertTrue(iter.hasNext());
         iter.next();
         iter.next();
@@ -46,7 +46,7 @@ public class FlockIteratorTest {
      * Test method for {@link flocking.boid.Flock.FlockIterator#next()}.
      */
     @Test
-    protected void testNext() {
+    public void testNext() {
         Boid[] testedBoids = flock.toArray();
         for (int i = 0; i < flock.size(); i++) {
             assertTrue(testedBoids[i].equals(iter.next()));

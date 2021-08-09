@@ -2,7 +2,9 @@ package flocking.util;
 
 /**
  * Perspective Class
- * Represents a Boid's Field of View
+ * <br>
+ * Represents a Boid's Field of View (also known as it's Neighborhood)
+ * defined by an Angle and a Radius
  * 
  * @author Red Williams <red.devcs@gmail.com>
  * @since Aug 4, 2021
@@ -11,6 +13,10 @@ public class Perspective {
 
     Angle theta;
     float radius;
+
+    /** Default Perspective */
+    public static final Perspective DEFAULT_PERSPECTIVE = new Perspective(
+        new Angle(180), 30);
 
     /**
      * Perspective Constructor

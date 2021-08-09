@@ -21,24 +21,26 @@ public class Boid {
     private Vector2D velocity;
     private Vector2D acceleration;
 
+    /**
+     * Boid Constructor
+     * <br>
+     * Creates a Boid with the specified Perspective with a random
+     * position on the screen
+     * 
+     * @param view Boid Perspective
+     */
     public Boid(Perspective view) {
-        perspective = view;
-        heading = new Angle((float) (Math.random() * 360));
 
-        float x = (float) (Math.random() * Window.WINDOW_WIDTH);
-        float y = (float) (Math.random() * Window.WINDOW_WIDTH);
-        position = new Vector2D(x, y);
-        velocity = Vector2D.random2D();
-        acceleration = Vector2D.random2D();
+        this(new Vector2D((float) (Math.random() * Window.WINDOW_WIDTH),
+            (float) (Math.random() * Window.WINDOW_HEIGHT)), view);
     }
 
 
     /**
      * Boid Constructor
-     * Creates a Boid with the specified position, velocity, and perspective
+     * Creates a Boid with the specified position and perspective
      * 
      * @param pos Boid Vector2D position
-     * @param vel Boid Velocity
      * @param view Boid Perspective
      */
     public Boid(Vector2D pos, Perspective view) {
@@ -48,7 +50,6 @@ public class Boid {
 
         velocity = Vector2D.random2D();
         acceleration = Vector2D.random2D();
-        System.out.println(velocity);
     }
 
 
@@ -93,8 +94,8 @@ public class Boid {
     }
 
 
-    public void setDirection(Angle newDir) {
-        heading = newDir;
+    public void setDirection(Angle heading) {
+        this.heading = heading;
     }
 
 
@@ -111,7 +112,6 @@ public class Boid {
         acceleration.scale(0);
         heading.setAngle((float) (Math.toDegrees(Math.atan2(velocity.y,
             velocity.x))));
-        System.out.println(heading);
         fixOffscreen();
     }
 
@@ -150,18 +150,13 @@ public class Boid {
         xAvg /= numBoids;
         yAvg /= numBoids;
 
-        // Alignment
+        // Apply Steering Force
         Vector2D steeringForce = new Vector2D(xAvg, yAvg);
         steeringForce.displaySubtract(velocity);
         steeringForce.normalize();
-// velocity = steeringForce;
-// steeringForce.scale(steeringForce.calcMagnitude() / 4);
-// System.out.println(steeringForce);
 
+        // Add force to Acceleration
         acceleration.displayAdd(steeringForce);
-// heading.setAngle((float) Math.toDegrees(Math.atan(steeringForce.y
-// / steeringForce.x)));
-        System.out.println(heading.toDegrees());
     }
 
 
@@ -226,8 +221,11 @@ public class Boid {
             return false;
         }
         Boid objBoid = (Boid) obj;
-        return objBoid.position.equals(position) && objBoid.velocity.equals(
-            velocity) && objBoid.perspective.equals(perspective);
+        return objBoid.position.equals(position)
+            && objBoid.velocity.equals(velocity)
+            && objBoid.acceleration.equals(acceleration)
+            && objBoid.heading.equals(heading)
+            && objBoid.perspective.equals(perspective);
     }
 
 
@@ -239,6 +237,6 @@ public class Boid {
     @Override
     public String toString() {
         return "[" + Styles.df.format(position.x) + ", " + Styles.df.format(
-            position.y) + ", " + "velocity.getDirection().toString()" + "]";
+            position.y) + ", " + heading + "]";
     }
 }

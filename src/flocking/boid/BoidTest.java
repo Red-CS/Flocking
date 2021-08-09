@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import flocking.Window;
+import flocking.util.Perspective;
 import flocking.util.Vector2D;
 
 /**
@@ -19,17 +20,20 @@ public class BoidTest {
     private Boid boid;
 
     /**
-     * @throws java.lang.Exception
+     * Runs before each test
      */
     @BeforeEach
-    public void setUp() throws Exception {}
+    public void setUp() {
+        boid = new Boid(new Vector2D(10.5f, 10.5f),
+            Perspective.DEFAULT_PERSPECTIVE);
+    }
 
 
     @Test
     public void testConstructors() {
         Boid randomBoid;
         for (int i = 0; i < 10000; i++) {
-            randomBoid = new Boid();
+            randomBoid = new Boid(Perspective.DEFAULT_PERSPECTIVE);
             Vector2D pos = randomBoid.getPosition();
             assertTrue(pos.x >= 0);
             assertTrue(pos.x < Window.WINDOW_WIDTH);
@@ -54,18 +58,9 @@ public class BoidTest {
      */
     @Test
     public void testSetPosition() {
-        boid.setPosition(new Vector2D(20.0f, 20.0f));
-        assertEquals(20.0, boid.getPosition().x);
+        boid.setPosition(new Vector2D(10.0f, 20.0f));
+        assertEquals(10.0, boid.getPosition().x);
         assertEquals(20.0, boid.getPosition().y);
-    }
-
-
-    /**
-     * Test method for {@link flocking.boid.Boid#update()}.
-     */
-    @Test
-    public void testUpdate() {
-        fail("Not yet implemented");
     }
 
 
@@ -83,7 +78,8 @@ public class BoidTest {
      */
     @Test
     public void testToString() {
-        assertEquals("[10.5, 10.5, 270.5°]", boid.toString());
+        assertTrue(boid.toString().startsWith("[10.5, 10.5, "));
+        assertTrue(boid.toString().endsWith("°]"));
     }
 
 }

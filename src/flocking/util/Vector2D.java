@@ -2,17 +2,23 @@ package flocking.util;
 
 /**
  * Vector2D Class
+ * <br>
+ * A Vector2D represents a 2-Dimensional Vector, which can be
+ * used to represent positions, physics vectors, and things of the like
  * 
  * @author Red Williams <red.devcs@gmail.com>
  * @since Aug 5, 2021
  */
 public class Vector2D {
 
+    // X and Y components
     public float x;
     public float y;
 
     /**
      * Vector2D Constructor
+     * <br>
+     * Creates a new Vector2D object with the passed components
      * 
      * @param x X component
      * @param y Y component
@@ -57,6 +63,11 @@ public class Vector2D {
     }
 
 
+    /**
+     * Adds two vectors together based on an inverted display
+     * 
+     * @param compliment Vector to add
+     */
     public void displayAdd(Vector2D compliment) {
         x += compliment.x;
         y -= compliment.y;
@@ -74,6 +85,11 @@ public class Vector2D {
     }
 
 
+    /**
+     * Subtracts two vectors together based on an inverted display
+     * 
+     * @param compliment Vector to subtract
+     */
     public void displaySubtract(Vector2D compliment) {
         x -= compliment.x;
         y += compliment.y;
@@ -91,6 +107,9 @@ public class Vector2D {
     }
 
 
+    /**
+     * Normalizes the vector, giving it a magnitude of length 1
+     */
     public void normalize() {
         x /= calcMagnitude();
         y /= calcMagnitude();
@@ -105,9 +124,9 @@ public class Vector2D {
 
 
     /**
-     * Finds the magnitude of a Vector
+     * Calculates the magnitude of the Vector
      * 
-     * @return
+     * @return the magnitude of the Vector
      */
     public float calcMagnitude() {
         return calcMagnitude(x, y);
@@ -115,11 +134,11 @@ public class Vector2D {
 
 
     /**
-     * Finds the magnitude of a Vector given its components
+     * Calculates the magnitude of the Vector given its components
      * 
-     * @param x
-     * @param y
-     * @return
+     * @param x X component
+     * @param y Y component
+     * @return the magnitude of the Vector
      */
     public static float calcMagnitude(float x, float y) {
         return (float) (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
@@ -129,7 +148,7 @@ public class Vector2D {
     /**
      * Returns a random unit vector
      * 
-     * @return
+     * @return a random unit vector
      */
     public static Vector2D random2D() {
         float angle = (float) (Math.random() * 2 * Math.PI);
