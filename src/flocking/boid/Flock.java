@@ -2,38 +2,25 @@ package flocking.boid;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import flocking.util.Angle;
-import flocking.util.Perspective;
 
 /**
  * Flock Class
  * Represents a Flock of Boids
  * 
  * @author Red Williams <red.devcs@gmail.com>
- * @since Aug 3, 2021
+ * @since Aug 8, 2021
  */
-public class Flock<T> implements Iterable<T> {
+public class Flock<T extends Boid> implements Iterable<T> {
 
-    public static final int DEFAULT_POPULATION_SIZE = 50;
-    private int populationSize;
-    private Boid[] flock;
+    private T[] flock;
 
-    public Flock() {
-        this(DEFAULT_POPULATION_SIZE);
-    }
-
-
-    public Flock(int populationSize) {
-        this.populationSize = populationSize;
-        flock = new Boid[populationSize];
-        for (int i = 0; i < populationSize; i++) {
-            flock[i] = new Boid(new Perspective(new Angle(180f), 30f));
-        }
+    public Flock(T[] flockArray) {
+        flock = flockArray;
     }
 
 
     public int size() {
-        return populationSize;
+        return flock.length;
     }
 
 
@@ -41,7 +28,7 @@ public class Flock<T> implements Iterable<T> {
      * @return
      */
     public T[] toArray() {
-        return (T[]) flock;
+        return flock;
     }
 
 
@@ -78,7 +65,7 @@ public class Flock<T> implements Iterable<T> {
          */
         @Override
         public boolean hasNext() {
-            return index < populationSize;
+            return index < flock.length;
         }
 
 
@@ -93,7 +80,7 @@ public class Flock<T> implements Iterable<T> {
                 throw new NoSuchElementException("Iterator has reached "
                     + "end of list");
             }
-            return (T) flock[index++];
+            return flock[index++];
         }
     }
 

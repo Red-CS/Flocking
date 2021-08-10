@@ -105,10 +105,11 @@ public class Boid {
     public void flock(Flock<Boid> flock) {
 
         align(flock);
+        cohere(flock);
 
-        position.displayAdd(velocity);
-        velocity.displayAdd(acceleration);
+        velocity.add(acceleration);
         velocity.limit(4);
+        position.add(velocity);
         acceleration.scale(0);
         heading.setAngle((float) (Math.toDegrees(Math.atan2(velocity.y,
             velocity.x))));
@@ -137,8 +138,8 @@ public class Boid {
         // Iterate through each member of the flock
         for (Boid boid : flock) {
             if (boid != this && boid.isVisibleTo(this)) {
-                xAvg += boid.getPosition().x;
-                yAvg += boid.getPosition().y;
+                xAvg += boid.velocity.x;
+                yAvg += boid.velocity.y;
                 numBoids++;
             }
         }
@@ -152,18 +153,49 @@ public class Boid {
 
         // Apply Steering Force
         Vector2D steeringForce = new Vector2D(xAvg, yAvg);
-        steeringForce.displaySubtract(velocity);
-        steeringForce.normalize();
+        steeringForce.setMagnitude(4);
+        steeringForce.subtract(velocity);
+        steeringForce.limit(0.2f);
 
         // Add force to Acceleration
-        acceleration.displayAdd(steeringForce);
+        acceleration.add(steeringForce);
     }
 
 
     /**
      * Steer to move towards the average position of local flockmates
      */
-    private void cohere() {
+    private void cohere(Flock<Boid> flock) {
+        // Average components
+        float xAvg = 0f;
+        float yAvg = 0f;
+        int numBoids = 0;
+
+        // Iterate through each member of the flock
+        for (Boid boid : flock) {
+            if (boid != this && boid.isVisibleTo(this)) {
+                xAvg += boid.position.x;
+                yAvg += boid.position.y;
+                numBoids++;
+            }
+        }
+
+        if (numBoids == 0) {
+            return;
+        }
+
+        xAvg /= numBoids;
+        yAvg /= numBoids;
+
+        // Apply Steering Force
+        Vector2D steeringForce = new Vector2D(xAvg, yAvg);
+        steeringForce.subtract(position);
+        steeringForce.setMagnitude(4f);
+        steeringForce.subtract(velocity);
+        steeringForce.limit(.2f);
+
+        // Add force to Acceleration
+        acceleration.add(steeringForce);
 
     }
 

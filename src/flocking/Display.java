@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import flocking.boid.Boid;
 import flocking.boid.Flock;
+import flocking.util.Angle;
+import flocking.util.Perspective;
 
 /**
  * Display Class
@@ -32,7 +34,7 @@ public class Display extends JPanel {
     public static final int FLOCK_SIZE = 30;
     private final int TICK_RATE = 10;
 
-    private final boolean shouldDrawViews = false;
+    private final boolean shouldDrawViews = true;
 
     /**
      * Display Constructor
@@ -46,7 +48,11 @@ public class Display extends JPanel {
         setSize(width, height);
 
         // Instantiate Flock
-        flock = new Flock<Boid>(FLOCK_SIZE);
+        Boid[] boids = new Boid[FLOCK_SIZE];
+        for (int i = 0; i < boids.length; i++) {
+            boids[i] = new Boid(new Perspective(new Angle(180f), 50f));
+        }
+        flock = new Flock<Boid>(boids);
 
         // Start Animation Timer
         timer = new Timer(TICK_RATE, new ActionListener() {
@@ -88,7 +94,7 @@ public class Display extends JPanel {
 
             // Get Polygon info
             int x = (int) boid.getPosition().x;
-            int y = (int) boid.getPosition().y;
+            int y = Window.WINDOW_HEIGHT - (int) boid.getPosition().y;
             int[] xCoords = { x + 12, x - 12, x - 12 };
             int[] yCoords = { y, y - 8, y + 8 };
 

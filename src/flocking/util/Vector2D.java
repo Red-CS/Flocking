@@ -117,9 +117,16 @@ public class Vector2D {
 
 
     public void limit(float magnitude) {
-        if (magnitude < calcMagnitude()) {
-            scale(magnitude / calcMagnitude());
+        if (magnitude * magnitude < calcMagnitude()) {
+            normalize();
+            scale(magnitude);
         }
+    }
+
+
+    public void setMagnitude(float magnitude) {
+        float currentMag = calcMagnitude();
+        scale(magnitude / currentMag);
     }
 
 

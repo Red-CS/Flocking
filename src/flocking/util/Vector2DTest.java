@@ -81,6 +81,13 @@ public class Vector2DTest {
     }
 
 
+    @Test
+    public void testSetMagnitude() {
+        vector.setMagnitude(2.5f);
+        assertEquals(2.5, vector.calcMagnitude(), 0.1);
+    }
+
+
     /**
      * Test method for {@link flocking.util.Vector2D#equals()}.
      */
