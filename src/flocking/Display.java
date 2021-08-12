@@ -31,10 +31,10 @@ public class Display extends JPanel {
     private Flock<Boid> flock;
     private Timer timer;
 
-    public static final int FLOCK_SIZE = 30;
+    public static final int FLOCK_SIZE = 50;
     private final int TICK_RATE = 10;
 
-    private final boolean shouldDrawViews = true;
+    private final boolean shouldDrawViews = false;
 
     /**
      * Display Constructor

@@ -54,21 +54,93 @@ public class Vector2DTest {
      * Test method for {@link flocking.util.Vector2D#add(Vector2D)}.
      */
     @Test
-    public void testAdd() {
+    public void testAddFromVector() {
         vector.add(new Vector2D(-10.52f, 1.2f));
         assertEquals(0, vector.x);
         assertEquals(11.72, vector.y, 0.01);
     }
 
 
+    @Test
+    public void testAddFromFloat() {
+        vector.add(3.48f, 2.48f);
+        assertEquals(14, vector.x);
+        assertEquals(13, vector.y);
+    }
+
+
+    @Test
+    public void testAddStatic() {
+        Vector2D sum = Vector2D.add(new Vector2D(3.5f, 2.5f), new Vector2D(2.5f,
+            3.5f));
+        assertTrue(sum.equals(new Vector2D(6, 6)));
+    }
+
+
+    @Test
+    public void testSubtractFromVector() {
+        vector.subtract(new Vector2D(10.52f, 0.52f));
+        assertEquals(0, vector.x);
+        assertEquals(10, vector.y);
+    }
+
+
+    @Test
+    public void testSubtractFromFloat() {
+        vector.subtract(3.12f, 2.12f);
+        assertEquals(7.4f, vector.x, 0.01);
+        assertEquals(8.4f, vector.y, 0.01);
+    }
+
+
+    @Test
+    public void testSubtractStatic() {
+        Vector2D diff = Vector2D.subtract(new Vector2D(3.5f, 2.5f),
+            new Vector2D(2.5f, 3.5f));
+        assertTrue(diff.equals(new Vector2D(1, -1)));
+    }
+
+
     /**
-     * Test method for {@link flocking.util.Vector2D#scale(float)}.
+     * Test method for {@link flocking.util.Vector2D#multiply(float)}.
      */
     @Test
-    public void testScale() {
-        vector.scale((float) (1.0 / 3.0));
+    public void testMultiply() {
+        vector.multiply((1.0f / 3.0f));
         assertEquals(3.5, vector.x, 0.01);
         assertEquals(3.5, vector.y, 0.01);
+    }
+
+
+    /**
+     * Test method for {@link flocking.util.Vector2D#divide(float)}.
+     */
+    @Test
+    public void testDivide() {
+        vector.divide(2.4f);
+        assertEquals(4.38f, vector.x, 0.01);
+        assertEquals(4.38f, vector.y, 0.01);
+    }
+
+
+    @Test
+    public void testDot() {
+        assertEquals(85.21, vector.dot(new Vector2D(3.5f, 4.6f)), 0.01);
+    }
+
+
+    @Test
+    public void testDotStatic() {
+        assertEquals(16.75, Vector2D.dot(new Vector2D(1.5f, 2.5f), new Vector2D(
+            3.5f, 4.6f)), 0.01);
+    }
+
+
+    @Test
+    public void testNormalize() {
+        vector.normalize();
+        assertEquals(0.7, vector.x, 0.01);
+        assertEquals(0.7, vector.y, 0.01);
     }
 
 
@@ -85,6 +157,24 @@ public class Vector2DTest {
     public void testSetMagnitude() {
         vector.setMagnitude(2.5f);
         assertEquals(2.5, vector.calcMagnitude(), 0.1);
+    }
+
+
+// @Test
+    public void testLimit() {
+        vector.limit(13.5f);
+        assertEquals(10.52f, vector.x, 0.01);
+        assertEquals(10.52f, vector.y, 0.01);
+        vector.limit(1);
+        assertEquals(0.7, vector.x, 0.01);
+        assertEquals(0.7, vector.y, 0.01);
+    }
+
+
+    @Test
+    public void testRandom2D() {
+        Vector2D r = Vector2D.random2D();
+        assertEquals(1, Math.sqrt(r.x * r.x + r.y * r.y), 0.001);
     }
 
 

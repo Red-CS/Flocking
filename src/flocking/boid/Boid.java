@@ -104,13 +104,14 @@ public class Boid {
      */
     public void flock(Flock<Boid> flock) {
 
-        align(flock);
         cohere(flock);
+        align(flock);
+        separate(flock);
 
         velocity.add(acceleration);
         velocity.limit(4);
         position.add(velocity);
-        acceleration.scale(0);
+        acceleration.multiply(0);
         heading.setAngle((float) (Math.toDegrees(Math.atan2(velocity.y,
             velocity.x))));
         fixOffscreen();
@@ -120,7 +121,42 @@ public class Boid {
     /**
      * Steer to avoid crowding local flockmates
      */
-    private void separate() {
+    private void separate(Flock<Boid> flock) {
+        // Average components
+        float xAvg = 0f;
+        float yAvg = 0f;
+        int numBoids = 0;
+
+        // Iterate through each member of the flock
+        for (Boid boid : flock) {
+            if (boid != this && boid.isVisibleTo(this)) {
+                Vector2D posDiff = Vector2D.subtract(position, boid.position);
+                float mag = posDiff.calcMagnitude();
+                if (mag == 0) {
+                    return;
+                }
+                posDiff.multiply(1 / (mag * mag));
+                xAvg += posDiff.x;
+                yAvg += posDiff.y;
+                numBoids++;
+            }
+        }
+
+        if (numBoids == 0) {
+            return;
+        }
+
+        xAvg /= numBoids;
+        yAvg /= numBoids;
+
+        // Apply Steering Force
+        Vector2D steeringForce = new Vector2D(xAvg, yAvg);
+        steeringForce.setMagnitude(4f);
+        steeringForce.subtract(velocity);
+        steeringForce.limit(0.275f);
+
+        // Add force to Acceleration
+        acceleration.add(steeringForce);
 
     }
 

@@ -1,5 +1,7 @@
 package flocking.util;
 
+import flocking.Styles;
+
 /**
  * Vector2D Class
  * <br>
@@ -55,44 +57,44 @@ public class Vector2D {
     /**
      * Adds two Vectors together
      * 
-     * @param compliment Vector to add
+     * @param v Vector to add
      */
-    public void add(Vector2D compliment) {
-        x += compliment.x;
-        y += compliment.y;
+    public void add(Vector2D v) {
+        x += v.x;
+        y += v.y;
     }
 
 
-    /**
-     * Adds two vectors together based on an inverted display
-     * 
-     * @param compliment Vector to add
-     */
-    public void displayAdd(Vector2D compliment) {
-        x += compliment.x;
-        y -= compliment.y;
+    public void add(float x, float y) {
+        this.x += x;
+        this.y += y;
+    }
+
+
+    public static Vector2D add(Vector2D v1, Vector2D v2) {
+        return new Vector2D(v1.x + v2.x, v1.y + v2.y);
     }
 
 
     /**
      * Subtracts one Vector from another
      * 
-     * @param compliment Vector to subtract
+     * @param v Vector to subtract
      */
-    public void subtract(Vector2D compliment) {
-        x -= compliment.x;
-        y -= compliment.y;
+    public void subtract(Vector2D v) {
+        x -= v.x;
+        y -= v.y;
     }
 
 
-    /**
-     * Subtracts two vectors together based on an inverted display
-     * 
-     * @param compliment Vector to subtract
-     */
-    public void displaySubtract(Vector2D compliment) {
-        x -= compliment.x;
-        y += compliment.y;
+    public void subtract(float x, float y) {
+        this.x -= x;
+        this.y -= y;
+    }
+
+
+    public static Vector2D subtract(Vector2D v1, Vector2D v2) {
+        return new Vector2D(v1.x - v2.x, v1.y - v2.y);
     }
 
 
@@ -101,9 +103,25 @@ public class Vector2D {
      * 
      * @param scaleFactor scale factor to scale the Vector by
      */
-    public void scale(float scaleFactor) {
+    public void multiply(float scaleFactor) {
         x *= scaleFactor;
         y *= scaleFactor;
+    }
+
+
+    public void divide(float scaleFactor) {
+        x /= scaleFactor;
+        y /= scaleFactor;
+    }
+
+
+    public float dot(Vector2D v) {
+        return x * v.x + y * v.y;
+    }
+
+
+    public static float dot(Vector2D v1, Vector2D v2) {
+        return v1.x * v2.x + v1.y * v2.y;
     }
 
 
@@ -111,22 +129,27 @@ public class Vector2D {
      * Normalizes the vector, giving it a magnitude of length 1
      */
     public void normalize() {
-        x /= calcMagnitude();
-        y /= calcMagnitude();
+        float m = calcMagnitude();
+        x /= m;
+        y /= m;
     }
 
 
     public void limit(float magnitude) {
-        if (magnitude * magnitude < calcMagnitude()) {
+        float currMag = calcMagnitude();
+        if (magnitude * magnitude < currMag * currMag) {
             normalize();
-            scale(magnitude);
+            multiply(magnitude);
         }
     }
 
 
     public void setMagnitude(float magnitude) {
         float currentMag = calcMagnitude();
-        scale(magnitude / currentMag);
+        if (currentMag == 0) {
+            return;
+        }
+        multiply(magnitude / currentMag);
     }
 
 
@@ -148,7 +171,7 @@ public class Vector2D {
      * @return the magnitude of the Vector
      */
     public static float calcMagnitude(float x, float y) {
-        return (float) (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+        return (float) (Math.sqrt(x * x + y * y));
     }
 
 
@@ -189,7 +212,7 @@ public class Vector2D {
      */
     @Override
     public String toString() {
-        return "[" + x + ", " + y + "]";
+        return "[" + Styles.df.format(x) + ", " + Styles.df.format(y) + "]";
     }
 
 }
