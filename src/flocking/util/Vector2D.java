@@ -65,12 +65,25 @@ public class Vector2D {
     }
 
 
+    /**
+     * Adds the componets to the Vector
+     * 
+     * @param x X component of the Vector
+     * @param y Y component of the Vector
+     */
     public void add(float x, float y) {
         this.x += x;
         this.y += y;
     }
 
 
+    /**
+     * Adds two Vectors together and returns the resulant Vector
+     * 
+     * @param v1 First Vector
+     * @param v2 Second Vector
+     * @return The resultant summation Vector
+     */
     public static Vector2D add(Vector2D v1, Vector2D v2) {
         return new Vector2D(v1.x + v2.x, v1.y + v2.y);
     }
@@ -87,39 +100,71 @@ public class Vector2D {
     }
 
 
+    /**
+     * Subtracts the components from the Vector
+     * 
+     * @param x X component to subtract
+     * @param y Y component to subtract
+     */
     public void subtract(float x, float y) {
         this.x -= x;
         this.y -= y;
     }
 
 
+    /**
+     * Subtracts two Vectors together and returns the resultant Vector
+     * 
+     * @param v1 First Vector
+     * @param v2 Second Vector
+     * @return The difference of the two Vectors as a Vector
+     */
     public static Vector2D subtract(Vector2D v1, Vector2D v2) {
         return new Vector2D(v1.x - v2.x, v1.y - v2.y);
     }
 
 
     /**
-     * Scales the vector by the passed scale factor
+     * Multiplies the vector by the passed multiplication factor
      * 
-     * @param scaleFactor scale factor to scale the Vector by
+     * @param multFactor scale factor to multiply the Vector by
      */
-    public void multiply(float scaleFactor) {
-        x *= scaleFactor;
-        y *= scaleFactor;
+    public void multiply(float multFactor) {
+        x *= multFactor;
+        y *= multFactor;
     }
 
 
-    public void divide(float scaleFactor) {
-        x /= scaleFactor;
-        y /= scaleFactor;
+    /**
+     * Divides the vector by the passed division factor
+     * 
+     * @param divFactor
+     */
+    public void divide(float divFactor) {
+        x /= divFactor;
+        y /= divFactor;
     }
 
 
+    /**
+     * Returns the scalar dot product of this Vector dotted with Vector2D
+     * {@code v}
+     * 
+     * @param v Other Vector2D to dot with
+     * @return the scalar dot product
+     */
     public float dot(Vector2D v) {
         return x * v.x + y * v.y;
     }
 
 
+    /**
+     * Returns the dot product of two Vectors
+     * 
+     * @param v1 First Vector
+     * @param v2 Second Vector
+     * @return the dot product of two Vectors
+     */
     public static float dot(Vector2D v1, Vector2D v2) {
         return v1.x * v2.x + v1.y * v2.y;
     }
@@ -135,6 +180,11 @@ public class Vector2D {
     }
 
 
+    /**
+     * Limits the Vector by restricting its magnitude to the specified length
+     * 
+     * @param magnitude Maximum length for the Vector's magnitude
+     */
     public void limit(float magnitude) {
         float currMag = calcMagnitude();
         if (magnitude * magnitude < currMag * currMag) {
@@ -144,6 +194,11 @@ public class Vector2D {
     }
 
 
+    /**
+     * Sets the magnitude of the Vector
+     * 
+     * @param magnitude Desired magnitude of the Vector
+     */
     public void setMagnitude(float magnitude) {
         float currentMag = calcMagnitude();
         if (currentMag == 0) {
