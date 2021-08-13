@@ -199,15 +199,13 @@ public class Boid {
      */
     private void cohere(Flock<Boid> flock) {
         // Average components
-        float xAvg = 0f;
-        float yAvg = 0f;
+        Vector2D steeringForce = new Vector2D(0, 0);
         int numBoids = 0;
 
         // Iterate through each member of the flock
         for (Boid boid : flock) {
             if (boid != this && boid.isVisibleTo(this)) {
-                xAvg += boid.position.x;
-                yAvg += boid.position.y;
+                steeringForce.add(boid.getPosition());
                 numBoids++;
             }
         }
@@ -216,11 +214,10 @@ public class Boid {
             return;
         }
 
-        xAvg /= numBoids;
-        yAvg /= numBoids;
+        steeringForce.divide(numBoids);
 
         // Apply Steering Force
-        Vector2D steeringForce = new Vector2D(xAvg, yAvg);
+
         steeringForce.subtract(position);
         steeringForce.setMagnitude(4f);
         steeringForce.subtract(velocity);
