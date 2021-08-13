@@ -2,6 +2,7 @@ package flocking.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,6 +121,26 @@ public class Vector2DTest {
         vector.divide(2.4f);
         assertEquals(4.38f, vector.x, 0.01);
         assertEquals(4.38f, vector.y, 0.01);
+    }
+
+
+    @Test
+    public void testAverage() {
+
+        // Test 0 args
+        assertThrows(IllegalArgumentException.class, () -> Vector2D.average());
+
+        // Test 1 arg
+        assertTrue(vector == Vector2D.average(vector));
+
+        // Test multiple args
+        Vector2D v1 = new Vector2D(2, 2);
+        Vector2D v2 = new Vector2D(3.5f, 3.5f);
+        Vector2D v3 = new Vector2D(4.09f, 1.21f);
+
+        Vector2D avg = Vector2D.average(v1, v2, v3);
+        assertEquals(3.2, avg.x, 0.01);
+        assertEquals(2.23, avg.y, 0.01);
     }
 
 

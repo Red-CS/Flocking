@@ -147,6 +147,33 @@ public class Vector2D {
 
 
     /**
+     * Returns the average Vector
+     * 
+     * @param vectors Vectors to include in average
+     * @throws IllegalArgumentException when no vectors are passed
+     * @return the average Vector
+     */
+    public static Vector2D average(Vector2D... vectors) {
+
+        if (vectors.length == 0) {
+            throw new IllegalArgumentException(
+                "Must include at least 1 Vector2D object");
+        }
+        if (vectors.length == 1) {
+            return vectors[0];
+        }
+
+        Vector2D meanVector = new Vector2D(0, 0);
+        for (Vector2D v : vectors) {
+            meanVector.add(v);
+        }
+
+        meanVector.divide(vectors.length);
+        return meanVector;
+    }
+
+
+    /**
      * Returns the scalar dot product of this Vector dotted with Vector2D
      * {@code v}
      * 
