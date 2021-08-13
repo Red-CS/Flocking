@@ -167,15 +167,13 @@ public class Boid {
     private void align(Flock<Boid> flock) {
 
         // Average components
-        float xAvg = 0f;
-        float yAvg = 0f;
+        Vector2D steeringForce = new Vector2D(0, 0);
         int numBoids = 0;
 
         // Iterate through each member of the flock
         for (Boid boid : flock) {
             if (boid != this && boid.isVisibleTo(this)) {
-                xAvg += boid.velocity.x;
-                yAvg += boid.velocity.y;
+                steeringForce.add(boid.getVelocity());
                 numBoids++;
             }
         }
@@ -184,11 +182,9 @@ public class Boid {
             return;
         }
 
-        xAvg /= numBoids;
-        yAvg /= numBoids;
+        steeringForce.divide(numBoids);
 
         // Apply Steering Force
-        Vector2D steeringForce = new Vector2D(xAvg, yAvg);
         steeringForce.setMagnitude(4);
         steeringForce.subtract(velocity);
         steeringForce.limit(0.2f);
