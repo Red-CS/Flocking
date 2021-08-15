@@ -8,6 +8,8 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -27,7 +29,7 @@ import steering.util.Perspective;
  * @since Aug 3, 2021
  */
 @SuppressWarnings("serial")
-public class Display extends JPanel {
+public class Display extends JPanel implements KeyListener {
     private Flock<Boid> flock;
     private Timer timer;
 
@@ -46,12 +48,17 @@ public class Display extends JPanel {
 
         setBackground(Styles.bg);
         setSize(width, height);
+        setFocusable(true);
+        requestFocus();
+
+        addKeyListener(this);
 
         // Instantiate Flock
         Boid[] boids = new Boid[FLOCK_SIZE];
         for (int i = 0; i < boids.length; i++) {
             boids[i] = new Boid(new Perspective(new Angle(180f), 50f));
         }
+
         flock = new Flock<Boid>(boids);
 
         // Start Animation Timer
@@ -69,7 +76,7 @@ public class Display extends JPanel {
             }
         });
 
-        timer.start();
+// timer.start();
     }
 
 
@@ -106,7 +113,9 @@ public class Display extends JPanel {
             if (shouldDrawViews) {
                 imageG2.drawOval(x - 25, y - 25, 50, 50);
             }
+
         }
+
         // Draw Image Buffer
         g2d.drawImage(imageBuffer, 0, 0, this);
 
@@ -171,7 +180,45 @@ public class Display extends JPanel {
             ixp[i] = (int) rotatedPoints[i].getX();
             iyp[i] = (int) rotatedPoints[i].getY();
         }
+
         return new Polygon(ixp, iyp, ixp.length);
     }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {}
+
+
+    /**
+     * @param e
+     */
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+        // Exit
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
+
+            case KeyEvent.VK_S:
+                toggleSettings();
+                break;
+
+            case KeyEvent.VK_F:
+                toggleFullscreen();
+                break;
+        }
+
+    }
+
+
+    private void toggleFullscreen() {}
+
+
+    private void toggleSettings() {}
 
 }

@@ -122,7 +122,7 @@ public class Boid {
     /**
      * Steer to avoid crowding local flockmates
      */
-    private void separate(Flock<Boid> flock) {
+    protected void separate(Flock<Boid> flock) {
         // Average components
         Vector2D steeringForce = new Vector2D(0, 0);
         int numBoids = 0;
@@ -135,10 +135,12 @@ public class Boid {
                 if (mag == 0) {
                     return;
                 }
+
                 posDiff.divide(mag * mag);
                 steeringForce.add(posDiff);
                 numBoids++;
             }
+
         }
 
         if (numBoids == 0) {
@@ -161,7 +163,7 @@ public class Boid {
     /**
      * Steer towards the average heading of local flockmates
      */
-    private void align(Flock<Boid> flock) {
+    protected void align(Flock<Boid> flock) {
 
         // Average components
         Vector2D steeringForce = new Vector2D(0, 0);
@@ -173,6 +175,7 @@ public class Boid {
                 steeringForce.add(boid.getVelocity());
                 numBoids++;
             }
+
         }
 
         if (numBoids == 0) {
@@ -194,7 +197,7 @@ public class Boid {
     /**
      * Steer to move towards the average position of local flockmates
      */
-    private void cohere(Flock<Boid> flock) {
+    protected void cohere(Flock<Boid> flock) {
         // Average components
         Vector2D steeringForce = new Vector2D(0, 0);
         int numBoids = 0;
@@ -205,6 +208,7 @@ public class Boid {
                 steeringForce.add(boid.getPosition());
                 numBoids++;
             }
+
         }
 
         if (numBoids == 0) {
@@ -229,7 +233,7 @@ public class Boid {
     /**
      * Fixes the Boid's position if it goes ofscreen
      */
-    private void fixOffscreen() {
+    protected void fixOffscreen() {
 
         // Fix possible X offset
         if (position.x < 0) {
@@ -257,7 +261,7 @@ public class Boid {
      * @return {@code true} if the Boid calling this method is in the
      * perspective of {@code boid}, {@code false} otherwise.
      */
-    private boolean isVisibleTo(Boid boid) {
+    protected boolean isVisibleTo(Boid boid) {
         Vector2D compPos = boid.getPosition();
         return boid.getPerspective().contains(new Vector2D(position.x
             - compPos.x, position.y - compPos.y));
@@ -275,9 +279,11 @@ public class Boid {
         if (obj == this) {
             return true;
         }
+
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
+
         Boid objBoid = (Boid) obj;
         return objBoid.position.equals(position)
             && objBoid.velocity.equals(velocity)
