@@ -36,7 +36,7 @@ public class Display extends JPanel implements KeyListener {
     public static final int FLOCK_SIZE = 50;
     private final int TICK_RATE = 10;
 
-    private final boolean shouldDrawViews = false;
+    private final boolean shouldDrawViews = !false;
 
     /**
      * Display Constructor
@@ -56,7 +56,7 @@ public class Display extends JPanel implements KeyListener {
         // Instantiate Flock
         Boid[] boids = new Boid[FLOCK_SIZE];
         for (int i = 0; i < boids.length; i++) {
-            boids[i] = new Boid(new Perspective(new Angle(180f), 50f));
+            boids[i] = new Boid(new Perspective(new Angle(130f), 50f));
         }
 
         flock = new Flock<Boid>(boids);
@@ -102,16 +102,17 @@ public class Display extends JPanel implements KeyListener {
             // Get Polygon info
             int x = (int) boid.getPosition().x;
             int y = Window.WINDOW_HEIGHT - (int) boid.getPosition().y;
-            int[] xCoords = { x + 12, x - 12, x - 12 };
-            int[] yCoords = { y, y - 8, y + 8 };
+            int[] xCoords = { x + Boid.HALF_HEIGHT, x - Boid.HALF_HEIGHT, x
+                - Boid.HALF_HEIGHT };
+            int[] yCoords = { y, y - Boid.HALF_WIDTH, y + Boid.HALF_WIDTH };
 
             // Draw Boid
-            imageG2.drawPolygon(buildPolygon(x, y, xCoords, yCoords, boid
-                .getDirection().toDegrees()));
+            boid.renderBoid(imageG2, x, y, xCoords, yCoords);
 
             // Draw Perspective
             if (shouldDrawViews) {
-                imageG2.drawOval(x - 25, y - 25, 50, 50);
+                boid.renderPerspective(imageG2, x, y);
+// imageG2.drawOval(x - 25, y - 25, 50, 50);
             }
 
         }
@@ -145,8 +146,8 @@ public class Display extends JPanel implements KeyListener {
      *     the
      *     same length as the provided y points array
      */
-    private Polygon buildPolygon(int centerX, int centerY, int[] xp, int[] yp,
-        double rotationAngle)
+    public static Polygon buildPolygon(int centerX, int centerY, int[] xp,
+        int[] yp, double rotationAngle)
         throws IllegalArgumentException {
         // copy the arrays so that we dont manipulate the originals, that way we
         // can

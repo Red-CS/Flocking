@@ -1,5 +1,8 @@
 package steering.flock.boid;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import steering.Display;
 import steering.Styles;
 import steering.Window;
 import steering.flock.Flock;
@@ -21,6 +24,12 @@ public class Boid {
     private Vector2D position;
     private Vector2D velocity;
     private Vector2D acceleration;
+
+    protected final Color boidColor = new Color(0x44F2F2F2, true);
+    protected final Color boidOutline = new Color(0xFFFFFF);
+
+    public static final int HALF_WIDTH = 8;
+    public static final int HALF_HEIGHT = 12;
 
     /**
      * Boid Constructor
@@ -265,6 +274,51 @@ public class Boid {
         Vector2D compPos = boid.getPosition();
         return boid.getPerspective().contains(new Vector2D(position.x
             - compPos.x, position.y - compPos.y));
+    }
+
+
+    public void renderBoid(Graphics imageG2, int x, int y, int[] xCoords,
+        int[] yCoords) {
+
+        imageG2.setColor(boidColor);
+        imageG2.fillPolygon(Display.buildPolygon(x, y, xCoords, yCoords, heading
+            .toDegrees()));
+        imageG2.setColor(boidOutline);
+        imageG2.drawPolygon(Display.buildPolygon(x, y, xCoords, yCoords, heading
+            .toDegrees()));
+    }
+
+
+    public void renderPerspective(Graphics imageG2, int x, int y) {
+
+        //@formatter:off
+
+        int halfR = (int) perspective.getRadius() / 2;
+
+        // Draw left arc
+        imageG2.drawArc(x - halfR, y - halfR,
+            (int) perspective.getRadius(), (int) perspective.getRadius(),
+            (int) heading.toDegrees(), (int) perspective.getTheta().toDegrees());
+
+        // Draw right arc
+        imageG2.drawArc(x - halfR, y - halfR,
+            (int) perspective.getRadius(), (int) perspective.getRadius(),
+            (int) heading.toDegrees(), (int) -perspective.getTheta().toDegrees());
+
+        imageG2.setColor(boidColor);
+
+        // Draw left line
+        imageG2.drawLine(x, y,
+            x + (int) (Math.cos(heading.toRadians() + perspective.getTheta().toRadians()) * halfR),
+            y - (int) (Math.sin(heading.toRadians() + perspective.getTheta().toRadians()) * halfR));
+
+        // Draw right line
+        imageG2.drawLine(x, y,
+            x + (int) (Math.cos(heading.toRadians() - perspective.getTheta().toRadians()) * halfR),
+            y - (int) (Math.sin(heading.toRadians() - perspective.getTheta().toRadians()) * halfR));
+        
+        //@formatter:on
+
     }
 
 
