@@ -241,23 +241,29 @@ public class Boid {
 
     /**
      * Fixes the Boid's position if it goes ofscreen
+     * 
+     * @implNote We know it's fully offscreen in the x direction when the x is
+     * added to half the Boid's height - the largest component of the Boid. The
+     * same idea goes for y.
+     * This way, Boids won't appear/disappear instantly, but will wait until the
+     * entire Boid is not visible before moving its position
      */
     protected void fixOffscreen() {
 
         // Fix possible X offset
-        if (position.x < 0) {
+        if (position.x + HALF_HEIGHT < 0) {
             position.x = Window.WINDOW_WIDTH;
         }
-        else if (position.x > Window.WINDOW_WIDTH) {
-            position.x = 2;
+        else if (position.x - HALF_HEIGHT > Window.WINDOW_WIDTH) {
+            position.x = -HALF_HEIGHT;
         }
 
         // Fix possible Y offset
-        if (position.y < 0) {
+        if (position.y + HALF_HEIGHT < 0) {
             position.y = Window.WINDOW_HEIGHT;
         }
-        else if (position.y > Window.WINDOW_HEIGHT) {
-            position.y = 2;
+        else if (position.y - HALF_HEIGHT > Window.WINDOW_HEIGHT) {
+            position.y = -HALF_HEIGHT;
         }
 
     }

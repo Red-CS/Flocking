@@ -2,9 +2,12 @@ package steering.flock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import steering.flock.boid.Boid;
+import steering.util.Angle;
+import steering.util.Perspective;
 
 /**
  * Tests the Flock Class
@@ -15,13 +18,19 @@ import steering.flock.boid.Boid;
 public class FlockTest {
 
     private Flock<Boid> flock;
+    private Boid[] boids;
 
     /**
      * Runs before every test
      */
     @BeforeEach
     public void setUp() {
-        flock = new Flock<Boid>(3);
+        boids = new Boid[3];
+        for (int i = 0; i < boids.length; i++) {
+            boids[i] = new Boid(new Perspective(new Angle(180f), 50f));
+        }
+
+        flock = new Flock<Boid>(boids);
     }
 
 
@@ -32,7 +41,11 @@ public class FlockTest {
     public void testToArray() {
         Boid[] boids = flock.toArray();
         assertEquals(3, boids.length);
-        assertNotNull(boids[0]);
+        for (int i = 0; i < boids.length; i++) {
+            assertNotNull(boids[i]);
+            assertTrue(boids[i].equals(this.boids[i]));
+        }
+
     }
 
 

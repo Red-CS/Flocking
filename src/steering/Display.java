@@ -26,7 +26,7 @@ import steering.util.Perspective;
  * Display Class
  * 
  * @author Red Williams <red.devcs@gmail.com>
- * @since Aug 3, 2021
+ * @since Aug 16, 2021
  */
 @SuppressWarnings("serial")
 public class Display extends JPanel implements KeyListener {
@@ -95,7 +95,6 @@ public class Display extends JPanel implements KeyListener {
         ((Graphics2D) imageG2).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         ((Graphics2D) imageG2).setStroke(new BasicStroke((float) 1.5));
-        imageG2.drawRect(-20, -20, 40, 40);
 
         // Draw Boids
         for (Boid boid : flock) {

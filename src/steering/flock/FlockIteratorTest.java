@@ -8,6 +8,8 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import steering.flock.boid.Boid;
+import steering.util.Angle;
+import steering.util.Perspective;
 
 /**
  * Tests the FlockIterator for the Flock Class
@@ -19,13 +21,19 @@ public class FlockIteratorTest {
 
     private Flock<Boid> flock;
     private Iterator<Boid> iter;
+    private Boid[] boids;
 
     /**
      * Runs before each test
      */
     @BeforeEach
     public void setUp() {
-        flock = new Flock<Boid>(2);
+        boids = new Boid[2];
+        for (int i = 0; i < boids.length; i++) {
+            boids[i] = new Boid(new Perspective(new Angle(180f), 50f));
+        }
+
+        flock = new Flock<Boid>(boids);
         iter = flock.iterator();
     }
 
@@ -48,10 +56,10 @@ public class FlockIteratorTest {
      */
     @Test
     public void testNext() {
-        Boid[] testedBoids = flock.toArray();
         for (int i = 0; i < flock.size(); i++) {
-            assertTrue(testedBoids[i].equals(iter.next()));
+            assertTrue(boids[i].equals(iter.next()));
         }
+
     }
 
 }
