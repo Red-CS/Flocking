@@ -82,8 +82,8 @@ public class Display extends JPanel implements KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        super.paintComponent(g2d);
 
         // Set up Image Buffer
         BufferedImage imageBuffer = new BufferedImage(getWidth(), getHeight(),
