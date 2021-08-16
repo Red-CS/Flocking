@@ -36,7 +36,7 @@ public class Display extends JPanel implements KeyListener {
     public static final int FLOCK_SIZE = 50;
     private final int TICK_RATE = 10;
 
-    private final boolean shouldDrawViews = !false;
+    private final boolean shouldDrawViews = false;
 
     /**
      * Display Constructor
@@ -56,7 +56,7 @@ public class Display extends JPanel implements KeyListener {
         // Instantiate Flock
         Boid[] boids = new Boid[FLOCK_SIZE];
         for (int i = 0; i < boids.length; i++) {
-            boids[i] = new Boid(new Perspective(new Angle(130f), 50f));
+            boids[i] = new Boid(new Perspective(new Angle(180f), 50f));
         }
 
         flock = new Flock<Boid>(boids);
@@ -76,7 +76,7 @@ public class Display extends JPanel implements KeyListener {
             }
         });
 
-// timer.start();
+        timer.start();
     }
 
 
@@ -95,6 +95,7 @@ public class Display extends JPanel implements KeyListener {
         ((Graphics2D) imageG2).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         ((Graphics2D) imageG2).setStroke(new BasicStroke((float) 1.5));
+        imageG2.drawRect(-20, -20, 40, 40);
 
         // Draw Boids
         for (Boid boid : flock) {
@@ -106,14 +107,13 @@ public class Display extends JPanel implements KeyListener {
                 - Boid.HALF_HEIGHT };
             int[] yCoords = { y, y - Boid.HALF_WIDTH, y + Boid.HALF_WIDTH };
 
-            // Draw Boid
-            boid.renderBoid(imageG2, x, y, xCoords, yCoords);
-
             // Draw Perspective
             if (shouldDrawViews) {
                 boid.renderPerspective(imageG2, x, y);
-// imageG2.drawOval(x - 25, y - 25, 50, 50);
             }
+
+            // Draw Boid
+            boid.renderBoid(imageG2, x, y, xCoords, yCoords);
 
         }
 

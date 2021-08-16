@@ -34,4 +34,12 @@ public class Window extends JFrame {
         new Window();
     }
 
+    /*
+               __
+          (___()'`;
+          /,    /`
+          \\"--\\     -fringe
+    
+     */
+
 }

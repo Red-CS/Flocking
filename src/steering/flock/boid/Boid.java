@@ -277,6 +277,15 @@ public class Boid {
     }
 
 
+    /**
+     * Draws the Boid on the screen
+     * 
+     * @param imageG2 Graphics context
+     * @param x Boid center X
+     * @param y Boid center Y
+     * @param xCoords Polygon X coords
+     * @param yCoords Polygon Y coords
+     */
     public void renderBoid(Graphics imageG2, int x, int y, int[] xCoords,
         int[] yCoords) {
 
@@ -289,6 +298,13 @@ public class Boid {
     }
 
 
+    /**
+     * Draws the Boid's Perspective on the screen
+     * 
+     * @param imageG2 Graphics context
+     * @param x Center X
+     * @param y Center Y
+     */
     public void renderPerspective(Graphics imageG2, int x, int y) {
 
         //@formatter:off
@@ -306,7 +322,7 @@ public class Boid {
             (int) heading.toDegrees(), (int) -perspective.getTheta().toDegrees());
 
         imageG2.setColor(boidColor);
-
+      
         // Draw left line
         imageG2.drawLine(x, y,
             x + (int) (Math.cos(heading.toRadians() + perspective.getTheta().toRadians()) * halfR),
